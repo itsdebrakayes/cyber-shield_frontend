@@ -165,7 +165,7 @@ const MobileDashboard: React.FC = () => {
       </AnimatePresence>
 
       {/* Quick actions */}
-      <motion.div variants={item} className="flex gap-3">
+      {hasAccounts && <motion.div variants={item} className="flex gap-3">
         <Link to="/link-scanner" className="flex-1">
           <Button variant="outline" className="h-12 w-full gap-2 rounded-xl">
             <LinkIcon className="h-4 w-4" /> Scan URL
