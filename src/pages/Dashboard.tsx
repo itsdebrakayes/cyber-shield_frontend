@@ -13,7 +13,6 @@ import {
   CheckCircle,
   ArrowRight,
 } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
 import {
   PieChart,
   Pie,
@@ -54,12 +53,12 @@ const pieColors = [
 ];
 
 const serviceCards = [
-  { title: "Video Detection", description: "Analyze videos for AI-generated deepfakes", icon: Video, path: "/video-detection", colorVar: "--cyber-purple", bgGradient: "from-purple-500/10 to-indigo-500/5" },
-  { title: "Image Detection", description: "Detect AI artifacts and manipulated images", icon: Image, path: "/image-detection", colorVar: "--cyber-blue", bgGradient: "from-blue-500/10 to-cyan-500/5" },
-  { title: "Audio Detection", description: "Identify synthetic voice and audio anomalies", icon: Mic, path: "/audio-detection", colorVar: "--cyber-teal", bgGradient: "from-teal-500/10 to-emerald-500/5" },
-  { title: "Email Analysis", description: "Scan emails for phishing and malicious links", icon: Mail, path: "/email-analysis", colorVar: "--cyber-yellow", bgGradient: "from-amber-500/10 to-yellow-500/5" },
-  { title: "Link Scanner", description: "Check URLs against malware databases", icon: LinkIcon, path: "/link-scanner", colorVar: "--cyber-green", bgGradient: "from-green-500/10 to-emerald-500/5" },
-  { title: "Breach Check", description: "Monitor accounts for exposed credentials", icon: ShieldAlert, path: "/breach-check", colorVar: "--cyber-red", bgGradient: "from-rose-500/10 to-pink-500/5" },
+  { title: "Video Detection", description: "Analyze videos for AI-generated deepfakes", icon: Video, path: "/video-detection", gradient: "from-violet-100 to-purple-50 dark:from-violet-500/10 dark:to-purple-500/5", iconBg: "bg-violet-200 dark:bg-violet-500/20", iconColor: "text-violet-600 dark:text-violet-400" },
+  { title: "Image Detection", description: "Detect AI artifacts and manipulated images", icon: Image, path: "/image-detection", gradient: "from-sky-100 to-blue-50 dark:from-sky-500/10 dark:to-blue-500/5", iconBg: "bg-sky-200 dark:bg-sky-500/20", iconColor: "text-sky-600 dark:text-sky-400" },
+  { title: "Audio Detection", description: "Identify synthetic voice and audio anomalies", icon: Mic, path: "/audio-detection", gradient: "from-emerald-100 to-teal-50 dark:from-emerald-500/10 dark:to-teal-500/5", iconBg: "bg-emerald-200 dark:bg-emerald-500/20", iconColor: "text-emerald-600 dark:text-emerald-400" },
+  { title: "Email Analysis", description: "Scan emails for phishing and malicious links", icon: Mail, path: "/email-analysis", gradient: "from-amber-100 to-yellow-50 dark:from-amber-500/10 dark:to-yellow-500/5", iconBg: "bg-amber-200 dark:bg-amber-500/20", iconColor: "text-amber-600 dark:text-amber-400" },
+  { title: "Link Scanner", description: "Check URLs against malware databases", icon: LinkIcon, path: "/link-scanner", gradient: "from-lime-100 to-green-50 dark:from-lime-500/10 dark:to-green-500/5", iconBg: "bg-lime-200 dark:bg-lime-500/20", iconColor: "text-lime-600 dark:text-lime-400" },
+  { title: "Breach Check", description: "Monitor accounts for exposed credentials", icon: ShieldAlert, path: "/breach-check", gradient: "from-rose-100 to-pink-50 dark:from-rose-500/10 dark:to-pink-500/5", iconBg: "bg-rose-200 dark:bg-rose-500/20", iconColor: "text-rose-600 dark:text-rose-400" },
 ];
 
 const container = {
@@ -78,77 +77,84 @@ const Dashboard: React.FC = () => {
       {/* Security Score Banner */}
       <motion.div variants={item}>
         <div className="glass-hero-purple overflow-hidden rounded-2xl text-white">
-          <div className="grid md:grid-cols-[280px_1fr]">
-            {/* Left: Big grade */}
+          <div className="grid md:grid-cols-[220px_1fr_260px]">
+            {/* Left: Big grade circle */}
             <div className="flex flex-col items-center justify-center gap-3 p-8">
-              <div className="flex h-32 w-32 items-center justify-center rounded-3xl bg-white/15 shadow-xl backdrop-blur-sm">
-                <span className="font-display text-5xl font-extrabold">{overallGrade}</span>
+              <div className="flex h-36 w-36 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 shadow-2xl shadow-emerald-500/30 ring-4 ring-white/20">
+                <span className="font-display text-5xl font-extrabold tracking-tight">{overallGrade}</span>
               </div>
               <div className="text-center">
-                <p className="font-display text-sm font-semibold">Security Score</p>
+                <p className="font-display text-sm font-semibold text-white/90">Security Score</p>
                 <div className="mt-1.5 flex items-center gap-2">
-                  <div className="h-2 w-24 overflow-hidden rounded-full bg-white/20">
-                    <div className="h-full rounded-full bg-white/80" style={{ width: `${overallScore}%` }} />
+                  <div className="h-2.5 w-28 overflow-hidden rounded-full bg-white/20">
+                    <div className="h-full rounded-full bg-white/80 transition-all duration-700" style={{ width: `${overallScore}%` }} />
                   </div>
-                  <span className="text-xs text-white/70">{overallScore}%</span>
+                  <span className="text-sm font-semibold text-white/80">{overallScore}%</span>
                 </div>
               </div>
             </div>
 
-            {/* Right: Details */}
-            <div className="grid gap-4 border-t border-white/10 p-6 md:grid-cols-2 md:border-l md:border-t-0">
+            {/* Middle: Inset panels */}
+            <div className="grid gap-3 border-t border-white/10 p-5 md:grid-cols-2 md:border-l md:border-t-0">
               {/* Monitored Accounts */}
-              <div className="space-y-2">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-white/50">Monitored Accounts</h3>
-                <div className="space-y-1.5">
+              <div className="glass-inset-panel p-4">
+                <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-foreground/50">Monitored Accounts</h3>
+                <div className="space-y-2">
                   {monitoredAccounts.map((account) => (
-                    <div key={account.name} className="flex items-center justify-between rounded-lg bg-white/10 px-3 py-2 backdrop-blur-sm">
-                      <span className="truncate text-xs">{account.name}</span>
-                      <span className="ml-2 text-xs font-bold">{account.grade}</span>
+                    <div key={account.name} className="flex items-center justify-between rounded-xl bg-muted/50 px-4 py-2.5">
+                      <span className="truncate text-sm font-medium text-foreground">{account.name}</span>
+                      <span className="ml-3 flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary">{account.grade}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Alerts + Chart */}
-              <div className="space-y-3">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-white/50">Recent Alerts</h3>
-                <div className="space-y-1.5">
+              {/* Recent Alerts */}
+              <div className="glass-inset-panel p-4">
+                <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-foreground/50">Recent Alerts</h3>
+                <div className="space-y-2">
                   {recentNotifications.map((n) => (
-                    <div key={n.id} className="flex items-start gap-2 rounded-lg bg-white/10 px-3 py-2 backdrop-blur-sm">
+                    <div key={n.id} className="flex items-start gap-3 rounded-xl bg-muted/50 px-4 py-2.5">
                       {n.type === "danger" ? (
-                        <AlertTriangle className="mt-0.5 h-3 w-3 flex-shrink-0 text-red-300" />
+                        <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-destructive" />
                       ) : n.type === "warning" ? (
-                        <AlertTriangle className="mt-0.5 h-3 w-3 flex-shrink-0 text-yellow-300" />
+                        <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-score-warning" />
                       ) : (
-                        <CheckCircle className="mt-0.5 h-3 w-3 flex-shrink-0 text-green-300" />
+                        <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-score-safe" />
                       )}
-                      <p className="line-clamp-2 text-[11px] leading-tight text-white/80">{n.message}</p>
+                      <div className="flex-1">
+                        <p className="text-sm leading-snug text-foreground">{n.message}</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">{n.time}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
 
-                {/* Mini pie */}
-                <div className="flex items-center gap-3 rounded-lg bg-white/10 p-3 backdrop-blur-sm">
-                  <div className="h-14 w-14 flex-shrink-0">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie data={breachSourceData} cx="50%" cy="50%" innerRadius={16} outerRadius={26} dataKey="value" strokeWidth={0}>
-                          {breachSourceData.map((_, i) => (
-                            <Cell key={i} fill={pieColors[i]} />
-                          ))}
-                        </Pie>
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                  <div className="flex flex-wrap gap-x-3 gap-y-0.5">
-                    {breachSourceData.map((d, i) => (
-                      <div key={d.name} className="flex items-center gap-1">
-                        <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: pieColors[i] }} />
-                        <span className="text-[10px] text-white/60">{d.name}</span>
-                      </div>
-                    ))}
-                  </div>
+            {/* Right: Pink accent panel */}
+            <div className="border-t border-white/10 p-5 md:border-l md:border-t-0">
+              <div className="glass-accent-pink h-full p-4">
+                <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-foreground/60">Breach Sources</h3>
+                <div className="mx-auto h-32 w-32">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={breachSourceData} cx="50%" cy="50%" innerRadius={28} outerRadius={55} dataKey="value" strokeWidth={2} stroke="hsl(0 0% 100% / 0.3)">
+                        {breachSourceData.map((_, i) => (
+                          <Cell key={i} fill={pieColors[i]} />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="mt-3 space-y-1">
+                  {breachSourceData.map((d, i) => (
+                    <div key={d.name} className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full" style={{ backgroundColor: pieColors[i] }} />
+                      <span className="text-xs text-foreground/70">{d.name}</span>
+                      <span className="ml-auto text-xs font-semibold text-foreground/50">{d.value}%</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -161,30 +167,22 @@ const Dashboard: React.FC = () => {
         <h2 className="mb-4 font-display text-xl font-semibold text-foreground">Security Services</h2>
       </motion.div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         {serviceCards.map((service) => {
           const Icon = service.icon;
           return (
             <motion.div key={service.title} variants={item}>
               <Link to={service.path} className="block">
-                <div className={`glass-card-gradient group h-full cursor-pointer bg-gradient-to-br ${service.bgGradient} p-4 transition-all hover:shadow-lg hover:-translate-y-1`}>
-                  <div className="flex flex-col items-start gap-3">
-                    <div
-                      className="flex h-10 w-10 items-center justify-center rounded-xl backdrop-blur-sm"
-                      style={{
-                        backgroundColor: `hsl(var(${service.colorVar}) / 0.15)`,
-                      }}
-                    >
-                      <Icon
-                        className="h-5 w-5"
-                        style={{ color: `hsl(var(${service.colorVar}))` }}
-                      />
+                <div className={`glass-card group aspect-square cursor-pointer bg-gradient-to-br ${service.gradient} p-5 transition-all hover:shadow-xl hover:-translate-y-1`}>
+                  <div className="flex h-full flex-col">
+                    <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${service.iconBg}`}>
+                      <Icon className={`h-6 w-6 ${service.iconColor}`} />
                     </div>
-                    <div>
-                      <h3 className="font-display text-sm font-semibold text-foreground">{service.title}</h3>
-                      <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{service.description}</p>
+                    <div className="mt-auto">
+                      <h3 className="font-display text-sm font-bold text-foreground">{service.title}</h3>
+                      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{service.description}</p>
                     </div>
-                    <div className="mt-auto flex items-center gap-1 text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                    <div className="mt-2 flex items-center gap-1 text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
                       Open <ArrowRight className="h-3 w-3" />
                     </div>
                   </div>
