@@ -176,7 +176,7 @@ const MobileDashboard: React.FC = () => {
             <ShieldAlert className="h-4 w-4" /> Check Breaches
           </Button>
         </Link>
-      </motion.div>
+      </motion.div>}
 
       {/* Service grid */}
       <motion.div variants={item}>
