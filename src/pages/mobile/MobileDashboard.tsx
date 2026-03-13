@@ -116,12 +116,9 @@ const MobileDashboard: React.FC = () => {
                   placeholder="email or @handle"
                   className="h-10 rounded-xl border-white/20 bg-white/15 text-sm text-white placeholder:text-white/50"
                 />
-                <Button size="sm" className="w-full gap-1.5 rounded-xl bg-white/20 text-white hover:bg-white/30">
+                <Button size="sm" onClick={handleAddAccount} className="w-full gap-1.5 rounded-xl bg-white/20 text-white hover:bg-white/30">
                   <Plus className="h-3.5 w-3.5" /> Add Account
                 </Button>
-                <button onClick={dismissWelcome} className="block w-full text-center text-xs text-white/40 hover:text-white/60">
-                  Skip for now
-                </button>
               </div>
             </div>
           </motion.div>
