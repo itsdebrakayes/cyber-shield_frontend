@@ -93,7 +93,7 @@ const MobileDashboard: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
           >
-            <div className="mobile-score-card overflow-hidden rounded-2xl p-6">
+            <div className="mobile-score-card overflow-hidden rounded-2xl p-5">
               <div className="flex items-start gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20">
                   <Sparkles className="h-5 w-5 text-white" />
