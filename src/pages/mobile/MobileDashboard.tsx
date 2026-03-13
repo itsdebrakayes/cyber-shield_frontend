@@ -166,12 +166,12 @@ const MobileDashboard: React.FC = () => {
       {/* Quick actions */}
       <motion.div variants={item} className="flex gap-3">
         <Link to="/link-scanner" className="flex-1">
-          <Button variant="outline" className="w-full gap-2 rounded-xl">
+          <Button variant="outline" className="h-12 w-full gap-2 rounded-xl">
             <LinkIcon className="h-4 w-4" /> Scan URL
           </Button>
         </Link>
         <Link to="/breach-check" className="flex-1">
-          <Button variant="outline" className="w-full gap-2 rounded-xl">
+          <Button variant="outline" className="h-12 w-full gap-2 rounded-xl">
             <ShieldAlert className="h-4 w-4" /> Check Breaches
           </Button>
         </Link>
