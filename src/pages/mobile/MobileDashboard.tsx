@@ -180,7 +180,7 @@ const MobileDashboard: React.FC = () => {
       {/* Service grid */}
       <motion.div variants={item}>
         <h2 className="mb-3 font-display text-sm font-semibold text-foreground">Services</h2>
-        <div className="grid grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-2 gap-3">
           {serviceCards.map((service) => {
             const Icon = service.icon;
             return (
