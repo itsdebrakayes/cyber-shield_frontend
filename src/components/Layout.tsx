@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Shield, Sun, Moon, Bell, User, LogOut } from "lucide-react";
+import { Shield, Sun, Moon, Bell, User, LogOut, Menu } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,11 +14,11 @@ import {
 const navLinks = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Link Scanner", path: "/link-scanner" },
-  { label: "Image Detection", path: "/image-detection" },
-  { label: "Video Detection", path: "/video-detection" },
-  { label: "Audio Detection", path: "/audio-detection" },
-  { label: "Email Analysis", path: "/email-analysis" },
-  { label: "Breach Check", path: "/breach-check" },
+  { label: "Image", path: "/image-detection" },
+  { label: "Video", path: "/video-detection" },
+  { label: "Audio", path: "/audio-detection" },
+  { label: "Email", path: "/email-analysis" },
+  { label: "Breach", path: "/breach-check" },
 ];
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -26,45 +27,76 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <nav className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Shield className="h-5 w-5 text-primary-foreground" />
+      {/* Floating liquid glass navbar */}
+      <div className="sticky top-0 z-50 flex justify-center px-4 pt-4">
+        <nav className="liquid-nav flex items-center gap-1 rounded-full border border-white/20 bg-card/40 px-3 py-2 shadow-lg shadow-primary/5 backdrop-blur-2xl dark:border-white/10 dark:bg-card/30">
+          {/* Logo */}
+          <Link to="/dashboard" className="mr-2 flex items-center gap-2 px-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
+              <Shield className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="font-display text-xl font-bold text-foreground">CyberShield</span>
+            <span className="hidden font-display text-lg font-bold text-foreground sm:inline">
+              CyberShield
+            </span>
           </Link>
 
-          <div className="hidden items-center gap-1 md:flex">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                  location.pathname === link.path
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+          {/* Desktop nav links */}
+          <div className="hidden items-center gap-0.5 md:flex">
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className="relative rounded-full px-3 py-1.5 text-sm font-medium transition-colors"
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeNav"
+                      className="absolute inset-0 rounded-full bg-primary/15 dark:bg-primary/20"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <span
+                    className={`relative z-10 ${
+                      isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {link.label}
+                  </span>
+                </Link>
+              );
+            })}
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={toggleTheme} className="text-muted-foreground">
-              {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+          {/* Actions */}
+          <div className="ml-2 flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="h-8 w-8 rounded-full text-muted-foreground"
+            >
+              {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
             </Button>
 
-            <Button variant="ghost" size="icon" className="relative text-muted-foreground">
-              <Bell className="h-5 w-5" />
-              <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-cyber-red" />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative h-8 w-8 rounded-full text-muted-foreground"
+            >
+              <Bell className="h-4 w-4" />
+              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-cyber-red" />
             </Button>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-muted-foreground">
-                  <User className="h-5 w-5" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-full text-muted-foreground"
+                >
+                  <User className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -79,27 +111,41 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-        </div>
+        </nav>
+      </div>
 
-        {/* Mobile nav */}
-        <div className="flex gap-1 overflow-x-auto border-t border-border px-4 py-2 md:hidden">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-                location.pathname === link.path
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      </nav>
+      {/* Mobile floating bottom nav */}
+      <div className="fixed bottom-4 left-4 right-4 z-50 flex justify-center md:hidden">
+        <nav className="liquid-nav flex gap-1 overflow-x-auto rounded-full border border-white/20 bg-card/40 px-3 py-2 shadow-lg shadow-primary/5 backdrop-blur-2xl dark:border-white/10 dark:bg-card/30">
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.path;
+            return (
+              <Link
+                key={link.path}
+                to={link.path}
+                className="relative whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium"
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="activeNavMobile"
+                    className="absolute inset-0 rounded-full bg-primary/15 dark:bg-primary/20"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span
+                  className={`relative z-10 ${
+                    isActive ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  {link.label}
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
 
-      <main className="mx-auto max-w-7xl px-4 py-6">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 py-6 pb-24 md:pb-6">{children}</main>
     </div>
   );
 };
