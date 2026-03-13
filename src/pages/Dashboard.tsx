@@ -2,22 +2,14 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Video,
-  Image,
-  Mic,
-  Mail,
-  Link as LinkIcon,
-  ShieldAlert,
-  AlertTriangle,
-  CheckCircle,
-  ArrowRight,
-  X,
-  Plus,
-  Sparkles,
+  Video, Image, Mic, Mail, Link as LinkIcon, ShieldAlert,
+  AlertTriangle, CheckCircle, ArrowRight, X, Plus, Sparkles,
 } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileDashboard from "@/pages/mobile/MobileDashboard";
 
 const monitoredAccounts = [
   { name: "john.doe@gmail.com", score: 88, grade: "A" },
@@ -71,9 +63,8 @@ const item = {
 };
 
 const Dashboard: React.FC = () => {
-  const [isNewUser, setIsNewUser] = useState(() => {
-    return localStorage.getItem("cybershield_welcomed") !== "true";
-  });
+  const isMobile = useIsMobile();
+  const [isNewUser, setIsNewUser] = useState(() => localStorage.getItem("cybershield_welcomed") !== "true");
   const [newAccount, setNewAccount] = useState("");
 
   const dismissWelcome = () => {
@@ -81,148 +72,149 @@ const Dashboard: React.FC = () => {
     localStorage.setItem("cybershield_welcomed", "true");
   };
 
+  if (isMobile) return <MobileDashboard />;
+
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
-      {/* Welcome banner for new users */}
-      <AnimatePresence>
-        {isNewUser && (
-          <motion.div
-            variants={item}
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-primary/5 p-5 dark:bg-primary/10">
-              <button
-                onClick={dismissWelcome}
-                className="absolute right-3 top-3 rounded-full p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
-              >
-                <X className="h-4 w-4" />
-              </button>
-              <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/15">
-                  <Sparkles className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-display text-base font-bold text-foreground">Welcome to CyberShield!</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                    Get started by adding accounts you'd like to monitor for breaches, phishing, and deepfakes. We'll keep an eye on them 24/7.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Score hero */}
+      {/* Score hero OR Welcome hero */}
       <motion.div variants={item}>
         <div className="glass-hero-purple dashboard-score-hero overflow-hidden rounded-[1.75rem] text-white">
-          {/* Desktop: 3-col, Tablet: stacked, Mobile: stacked */}
-          <div className="flex flex-col xl:grid xl:grid-cols-[220px_1fr_280px]">
-            {/* Grade orb */}
-            <div className="flex flex-col items-center justify-center gap-3 p-6 sm:p-8">
-              <div className="dashboard-grade-orb flex h-28 w-28 items-center justify-center rounded-full ring-4 ring-white/25 sm:h-36 sm:w-36">
-                <span className="font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl">{overallGrade}</span>
-              </div>
-              <div className="text-center">
-                <p className="font-display text-sm font-semibold text-white/90">Security Score</p>
-                <div className="mt-1.5 flex items-center gap-2">
-                  <div className="h-2.5 w-24 overflow-hidden rounded-full bg-white/25 sm:w-28">
-                    <div className="h-full rounded-full bg-white/85 transition-all duration-700" style={{ width: `${overallScore}%` }} />
-                  </div>
-                  <span className="text-sm font-semibold text-white/85">{overallScore}%</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Middle: Accounts + Alerts */}
-            <div className="grid gap-3 border-t border-white/15 p-4 sm:grid-cols-2 sm:p-5 xl:border-l xl:border-t-0">
-              <div className="glass-inset-panel p-4 sm:p-5">
-                <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-foreground/50">Monitored Accounts</h3>
-                <div className="space-y-2">
-                  {monitoredAccounts.map((account) => (
-                    <div key={account.name} className="flex items-center justify-between rounded-xl bg-muted/55 px-3 py-2.5 sm:px-4 sm:py-3">
-                      <span className="min-w-0 truncate text-sm font-semibold text-foreground sm:text-[15px]">{account.name}</span>
-                      <span className="ml-2 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/12 text-xs font-bold text-primary sm:h-8 sm:w-8 sm:text-sm">{account.grade}</span>
+          <AnimatePresence mode="wait">
+            {isNewUser ? (
+              <motion.div
+                key="welcome-hero"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col lg:grid lg:grid-cols-[1fr_300px]"
+              >
+                {/* Welcome content */}
+                <div className="flex flex-col justify-center p-6 sm:p-8">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/20">
+                      <Sparkles className="h-6 w-6 text-white" />
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="glass-inset-panel p-4 sm:p-5">
-                <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-foreground/50">Recent Alerts</h3>
-                <div className="space-y-2">
-                  {recentNotifications.map((n) => (
-                    <div key={n.id} className="flex items-start gap-2.5 rounded-xl bg-muted/55 px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
-                      {n.type === "danger" ? (
-                        <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-destructive" />
-                      ) : n.type === "warning" ? (
-                        <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-score-warning" />
-                      ) : (
-                        <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-score-safe" />
-                      )}
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm leading-snug text-foreground sm:text-[15px]">{n.message}</p>
-                        <p className="mt-1 text-xs text-muted-foreground sm:text-sm">{n.time}</p>
-                      </div>
+                    <div>
+                      <h2 className="font-display text-2xl font-bold text-white">Welcome to CyberShield!</h2>
+                      <p className="mt-2 max-w-lg text-sm leading-relaxed text-white/70">
+                        Get started by adding the accounts you'd like to monitor for breaches, phishing, and deepfakes. We'll keep an eye on them 24/7.
+                      </p>
                     </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Pink panel — breach sources OR add accounts for new users */}
-            <div className="border-t border-white/15 p-4 sm:p-5 xl:border-l xl:border-t-0">
-              {isNewUser ? (
-                <div className="glass-accent-pink h-full rounded-2xl p-5">
-                  <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-foreground/60">Add Accounts</h3>
-                  <p className="mb-4 text-sm leading-relaxed text-foreground/50">
-                    Enter emails or social handles to start monitoring.
-                  </p>
-                  <div className="space-y-2.5">
-                    <Input
-                      value={newAccount}
-                      onChange={(e) => setNewAccount(e.target.value)}
-                      placeholder="email or @handle"
-                      className="h-9 rounded-xl border-white/20 bg-white/60 text-sm text-foreground placeholder:text-muted-foreground/60 dark:bg-white/10"
-                    />
-                    <Button size="sm" className="w-full gap-1.5 rounded-xl">
-                      <Plus className="h-3.5 w-3.5" /> Add Account
-                    </Button>
                   </div>
-                  <button onClick={dismissWelcome} className="mt-3 block w-full text-center text-xs text-foreground/40 hover:text-foreground/60">
-                    Skip for now
-                  </button>
                 </div>
-              ) : (
-                <div className="glass-accent-pink dashboard-breach-panel h-full p-5">
-                  <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-foreground/60">Breach Sources</h3>
-                  <div className="mx-auto h-32 w-32 sm:h-36 sm:w-36">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie data={breachSourceData} cx="50%" cy="50%" innerRadius={28} outerRadius={54} dataKey="value" strokeWidth={2} stroke="hsl(var(--card) / 0.4)">
-                          {breachSourceData.map((_, i) => (
-                            <Cell key={i} fill={pieColors[i]} />
-                          ))}
-                        </Pie>
-                      </PieChart>
-                    </ResponsiveContainer>
+                {/* Pink panel — add accounts */}
+                <div className="border-t border-white/15 p-4 sm:p-5 lg:border-l lg:border-t-0">
+                  <div className="glass-accent-pink h-full rounded-2xl p-5">
+                    <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-foreground/60">Add Accounts</h3>
+                    <p className="mb-4 text-sm leading-relaxed text-foreground/50">
+                      Enter emails or social handles to start monitoring.
+                    </p>
+                    <div className="space-y-2.5">
+                      <Input
+                        value={newAccount}
+                        onChange={(e) => setNewAccount(e.target.value)}
+                        placeholder="email or @handle"
+                        className="h-9 rounded-xl border-white/20 bg-white/60 text-sm text-foreground placeholder:text-muted-foreground/60 dark:bg-white/10"
+                      />
+                      <Button size="sm" className="w-full gap-1.5 rounded-xl">
+                        <Plus className="h-3.5 w-3.5" /> Add Account
+                      </Button>
+                    </div>
+                    <button onClick={dismissWelcome} className="mt-3 block w-full text-center text-xs text-foreground/40 hover:text-foreground/60">
+                      Skip for now
+                    </button>
                   </div>
-                  <div className="mt-3 space-y-1.5">
-                    {breachSourceData.map((d, i) => (
-                      <div key={d.name} className="flex items-center gap-2">
-                        <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: pieColors[i] }} />
-                        <span className="text-xs text-foreground/75 sm:text-sm">{d.name}</span>
-                        <span className="ml-auto text-xs font-semibold text-foreground/55 sm:text-sm">{d.value}%</span>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="score-hero"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col lg:grid lg:grid-cols-[220px_1fr_280px]"
+              >
+                {/* Grade orb */}
+                <div className="flex flex-col items-center justify-center gap-3 p-6 sm:p-8">
+                  <div className="dashboard-grade-orb flex h-28 w-28 items-center justify-center rounded-full ring-4 ring-white/25 sm:h-36 sm:w-36">
+                    <span className="font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl">{overallGrade}</span>
+                  </div>
+                  <div className="text-center">
+                    <p className="font-display text-sm font-semibold text-white/90">Security Score</p>
+                    <div className="mt-1.5 flex items-center gap-2">
+                      <div className="h-2.5 w-24 overflow-hidden rounded-full bg-white/25 sm:w-28">
+                        <div className="h-full rounded-full bg-white/85 transition-all duration-700" style={{ width: `${overallScore}%` }} />
                       </div>
-                    ))}
+                      <span className="text-sm font-semibold text-white/85">{overallScore}%</span>
+                    </div>
                   </div>
                 </div>
-              )}
-            </div>
-          </div>
+
+                {/* Middle: Accounts + Alerts */}
+                <div className="grid gap-3 border-t border-white/15 p-4 sm:grid-cols-2 sm:p-5 lg:border-l lg:border-t-0">
+                  <div className="glass-inset-panel p-4 sm:p-5">
+                    <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-foreground/50">Monitored Accounts</h3>
+                    <div className="space-y-2">
+                      {monitoredAccounts.map((account) => (
+                        <div key={account.name} className="flex items-center justify-between rounded-xl bg-muted/55 px-3 py-2.5 sm:px-4 sm:py-3">
+                          <span className="min-w-0 truncate text-sm font-semibold text-foreground sm:text-[15px]">{account.name}</span>
+                          <span className="ml-2 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/12 text-xs font-bold text-primary sm:h-8 sm:w-8 sm:text-sm">{account.grade}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="glass-inset-panel p-4 sm:p-5">
+                    <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-foreground/50">Recent Alerts</h3>
+                    <div className="space-y-2">
+                      {recentNotifications.map((n) => (
+                        <div key={n.id} className="flex items-start gap-2.5 rounded-xl bg-muted/55 px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
+                          {n.type === "danger" ? (
+                            <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-destructive" />
+                          ) : n.type === "warning" ? (
+                            <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-score-warning" />
+                          ) : (
+                            <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-score-safe" />
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm leading-snug text-foreground sm:text-[15px]">{n.message}</p>
+                            <p className="mt-1 text-xs text-muted-foreground sm:text-sm">{n.time}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Breach sources */}
+                <div className="border-t border-white/15 p-4 sm:p-5 lg:border-l lg:border-t-0">
+                  <div className="glass-accent-pink dashboard-breach-panel h-full p-5">
+                    <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-foreground/60">Breach Sources</h3>
+                    <div className="mx-auto h-32 w-32 sm:h-36 sm:w-36">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie data={breachSourceData} cx="50%" cy="50%" innerRadius={28} outerRadius={54} dataKey="value" strokeWidth={2} stroke="hsl(var(--card) / 0.4)">
+                            {breachSourceData.map((_, i) => (
+                              <Cell key={i} fill={pieColors[i]} />
+                            ))}
+                          </Pie>
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="mt-3 space-y-1.5">
+                      {breachSourceData.map((d, i) => (
+                        <div key={d.name} className="flex items-center gap-2">
+                          <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: pieColors[i] }} />
+                          <span className="text-xs text-foreground/75 sm:text-sm">{d.name}</span>
+                          <span className="ml-auto text-xs font-semibold text-foreground/55 sm:text-sm">{d.value}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
 

@@ -60,7 +60,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </Link>
 
           {/* Center floating nav pill */}
-          <nav className="nav-glass-pill flex items-center gap-1 rounded-full px-2 py-1.5">
+          <nav className="nav-glass-pill hidden items-center gap-1 rounded-full px-2 py-1.5 md:flex">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               const Icon = link.icon;
