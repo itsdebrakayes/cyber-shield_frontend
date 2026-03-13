@@ -1,7 +1,21 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Shield, Sun, Moon, Bell, User, LogOut, Menu } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  Shield,
+  Sun,
+  Moon,
+  Bell,
+  User,
+  LogOut,
+  LayoutDashboard,
+  Link as LinkIcon,
+  Image,
+  Video,
+  Mic,
+  Mail,
+  ShieldAlert,
+} from "lucide-react";
+import { motion } from "framer-motion";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,15 +24,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const navLinks = [
-  { label: "Dashboard", path: "/dashboard" },
-  { label: "Link Scanner", path: "/link-scanner" },
-  { label: "Image", path: "/image-detection" },
-  { label: "Video", path: "/video-detection" },
-  { label: "Audio", path: "/audio-detection" },
-  { label: "Email", path: "/email-analysis" },
-  { label: "Breach", path: "/breach-check" },
+  { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
+  { label: "Link Scanner", path: "/link-scanner", icon: LinkIcon },
+  { label: "Image Detection", path: "/image-detection", icon: Image },
+  { label: "Video Detection", path: "/video-detection", icon: Video },
+  { label: "Audio Detection", path: "/audio-detection", icon: Mic },
+  { label: "Email Analysis", path: "/email-analysis", icon: Mail },
+  { label: "Breach Check", path: "/breach-check", icon: ShieldAlert },
 ];
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -40,37 +59,45 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </span>
           </Link>
 
-          {/* Desktop nav links */}
+          {/* Desktop nav links - icons only */}
           <div className="hidden items-center gap-0.5 md:flex">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
+              const Icon = link.icon;
               return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className="relative rounded-full px-3 py-1.5 text-sm font-medium transition-colors"
-                >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeNav"
-                      className="absolute inset-0 rounded-full bg-primary/15 dark:bg-primary/20"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  <span
-                    className={`relative z-10 ${
-                      isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
+                <Tooltip key={link.path}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      to={link.path}
+                      className="relative flex h-9 w-9 items-center justify-center rounded-full transition-colors"
+                    >
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeNav"
+                          className="absolute inset-0 rounded-full bg-primary/15 dark:bg-primary/20"
+                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                      <Icon
+                        className={`relative z-10 h-4 w-4 ${
+                          isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="text-xs">
                     {link.label}
-                  </span>
-                </Link>
+                  </TooltipContent>
+                </Tooltip>
               );
             })}
           </div>
 
+          {/* Divider */}
+          <div className="mx-1 hidden h-5 w-px bg-border/50 md:block" />
+
           {/* Actions */}
-          <div className="ml-2 flex items-center gap-1">
+          <div className="flex items-center gap-0.5">
             <Button
               variant="ghost"
               size="icon"
@@ -116,14 +143,15 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
       {/* Mobile floating bottom nav */}
       <div className="fixed bottom-4 left-4 right-4 z-50 flex justify-center md:hidden">
-        <nav className="liquid-nav flex gap-1 overflow-x-auto rounded-full border border-white/20 bg-card/40 px-3 py-2 shadow-lg shadow-primary/5 backdrop-blur-2xl dark:border-white/10 dark:bg-card/30">
+        <nav className="liquid-nav flex gap-1 rounded-full border border-white/20 bg-card/40 px-3 py-2 shadow-lg shadow-primary/5 backdrop-blur-2xl dark:border-white/10 dark:bg-card/30">
           {navLinks.map((link) => {
             const isActive = location.pathname === link.path;
+            const Icon = link.icon;
             return (
               <Link
                 key={link.path}
                 to={link.path}
-                className="relative whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium"
+                className="relative flex h-9 w-9 items-center justify-center rounded-full"
               >
                 {isActive && (
                   <motion.div
@@ -132,13 +160,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
-                <span
-                  className={`relative z-10 ${
+                <Icon
+                  className={`relative z-10 h-4 w-4 ${
                     isActive ? "text-primary" : "text-muted-foreground"
                   }`}
-                >
-                  {link.label}
-                </span>
+                />
               </Link>
             );
           })}
