@@ -186,7 +186,7 @@ const MobileDashboard: React.FC = () => {
             return (
               <Link key={service.title} to={service.path}>
                 <div className={`dashboard-service-card dashboard-service-card--${service.tone} mobile-service-tile flex flex-col items-center justify-center gap-2 p-3 text-center`}>
-                  <div className={`dashboard-service-icon dashboard-service-icon--${service.tone} !mt-0 !h-12 !w-12 !rounded-xl`}>
+                  <div className={`dashboard-service-icon dashboard-service-icon--${service.tone} !mt-0 !h-10 !w-10 !rounded-xl`}>
                     <Icon className="h-5 w-5" />
                   </div>
                   <div>
