@@ -89,7 +89,7 @@ const MobileDashboard: React.FC = () => {
 
       {/* Score card OR Welcome card */}
       <AnimatePresence mode="wait">
-        {isNewUser ? (
+        {!hasAccounts ? (
           <motion.div
             key="welcome"
             variants={item}
