@@ -138,3 +138,21 @@
     font-family: 'Space Grotesk', sans-serif;
   }
 }
+
+.liquid-nav {
+  background-image: linear-gradient(
+    135deg,
+    hsl(var(--card) / 0.5) 0%,
+    hsl(var(--card) / 0.3) 50%,
+    hsl(var(--card) / 0.5) 100%
+  );
+  box-shadow:
+    0 8px 32px hsl(var(--primary) / 0.08),
+    inset 0 1px 0 hsl(0 0% 100% / 0.15);
+}
+
+.dark .liquid-nav {
+  box-shadow:
+    0 8px 32px hsl(var(--primary) / 0.12),
+    inset 0 1px 0 hsl(0 0% 100% / 0.08);
+}
