@@ -61,12 +61,16 @@ const item = {
 };
 
 const MobileDashboard: React.FC = () => {
-  const [isNewUser, setIsNewUser] = useState(() => localStorage.getItem("cybershield_welcomed") !== "true");
+  const [accounts, setAccounts] = useState<string[]>([]);
   const [newAccount, setNewAccount] = useState("");
+  const hasAccounts = accounts.length > 0;
 
-  const dismissWelcome = () => {
-    setIsNewUser(false);
-    localStorage.setItem("cybershield_welcomed", "true");
+  const handleAddAccount = () => {
+    const trimmed = newAccount.trim();
+    if (trimmed) {
+      setAccounts((prev) => [...prev, trimmed]);
+      setNewAccount("");
+    }
   };
 
   return (
