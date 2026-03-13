@@ -46,21 +46,21 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Floating liquid glass navbar */}
-      <div className="sticky top-0 z-50 flex justify-center px-4 pt-4">
-        <nav className="liquid-nav flex items-center gap-1 rounded-full border border-white/20 bg-card/40 px-3 py-2 shadow-lg shadow-primary/5 backdrop-blur-2xl dark:border-white/10 dark:bg-card/30">
-          {/* Logo */}
-          <Link to="/dashboard" className="mr-2 flex items-center gap-2 px-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-              <Shield className="h-4 w-4 text-primary-foreground" />
+      {/* Top bar: nav center, actions right */}
+      <div className="sticky top-0 z-50 px-4 pt-4">
+        <div className="mx-auto flex max-w-7xl items-center justify-between">
+          {/* Logo - left */}
+          <Link to="/dashboard" className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary shadow-md">
+              <Shield className="h-4.5 w-4.5 text-primary-foreground" />
             </div>
             <span className="hidden font-display text-lg font-bold text-foreground sm:inline">
               CyberShield
             </span>
           </Link>
 
-          {/* Desktop nav links - icons only */}
-          <div className="hidden items-center gap-0.5 md:flex">
+          {/* Center floating nav pill */}
+          <nav className="nav-glass-pill flex items-center gap-1 rounded-full px-2 py-1.5">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               const Icon = link.icon;
@@ -74,13 +74,15 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                       {isActive && (
                         <motion.div
                           layoutId="activeNav"
-                          className="absolute inset-0 rounded-full bg-primary/15 dark:bg-primary/20"
-                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                          className="absolute inset-0 rounded-full bg-foreground/8 dark:bg-white/10"
+                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
                         />
                       )}
                       <Icon
-                        className={`relative z-10 h-4 w-4 ${
-                          isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                        className={`relative z-10 h-[18px] w-[18px] transition-colors ${
+                          isActive
+                            ? "text-foreground"
+                            : "text-muted-foreground/60 hover:text-foreground/80"
                         }`}
                       />
                     </Link>
@@ -91,29 +93,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </Tooltip>
               );
             })}
-          </div>
+          </nav>
 
-          {/* Divider */}
-          <div className="mx-1 hidden h-5 w-px bg-border/50 md:block" />
-
-          {/* Actions */}
-          <div className="flex items-center gap-0.5">
+          {/* Right actions */}
+          <div className="flex items-center gap-1.5">
             <Button
               variant="ghost"
               size="icon"
-              onClick={toggleTheme}
-              className="h-8 w-8 rounded-full text-muted-foreground"
+              className="relative h-9 w-9 rounded-full text-muted-foreground hover:text-foreground"
             >
-              {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative h-8 w-8 rounded-full text-muted-foreground"
-            >
-              <Bell className="h-4 w-4" />
-              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-cyber-red" />
+              <Bell className="h-[18px] w-[18px]" />
+              <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-cyber-red" />
             </Button>
 
             <DropdownMenu>
@@ -121,9 +111,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 rounded-full text-muted-foreground"
+                  className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground"
                 >
-                  <User className="h-4 w-4" />
+                  <User className="h-[18px] w-[18px]" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -137,13 +127,25 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Theme toggle - separate circle */}
+            <button
+              onClick={toggleTheme}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-border/50 bg-card/60 text-muted-foreground shadow-sm backdrop-blur-md transition-colors hover:text-foreground"
+            >
+              {theme === "light" ? (
+                <Moon className="h-[18px] w-[18px]" />
+              ) : (
+                <Sun className="h-[18px] w-[18px]" />
+              )}
+            </button>
           </div>
-        </nav>
+        </div>
       </div>
 
       {/* Mobile floating bottom nav */}
       <div className="fixed bottom-4 left-4 right-4 z-50 flex justify-center md:hidden">
-        <nav className="liquid-nav flex gap-1 rounded-full border border-white/20 bg-card/40 px-3 py-2 shadow-lg shadow-primary/5 backdrop-blur-2xl dark:border-white/10 dark:bg-card/30">
+        <nav className="nav-glass-pill flex gap-1 rounded-full px-2 py-1.5">
           {navLinks.map((link) => {
             const isActive = location.pathname === link.path;
             const Icon = link.icon;
@@ -156,13 +158,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 {isActive && (
                   <motion.div
                     layoutId="activeNavMobile"
-                    className="absolute inset-0 rounded-full bg-primary/15 dark:bg-primary/20"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    className="absolute inset-0 rounded-full bg-foreground/8 dark:bg-white/10"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
                 <Icon
                   className={`relative z-10 h-4 w-4 ${
-                    isActive ? "text-primary" : "text-muted-foreground"
+                    isActive ? "text-foreground" : "text-muted-foreground/60"
                   }`}
                 />
               </Link>
