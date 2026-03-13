@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { ShieldAlert, Plus, Trash2, AlertTriangle, ShieldCheck, Lock, Eye, Mail, Phone, Globe, Server } from "lucide-react";
+import { ShieldAlert, Plus, Trash2, AlertTriangle, Lock, Eye, Mail, Phone, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import RiskGauge from "@/components/RiskGauge";
@@ -84,26 +84,27 @@ const BreachCheck: React.FC = () => {
                 </div>
               </div>
 
+              {/* Stats in white inset panels */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="rounded-xl bg-white/15 px-4 py-3 backdrop-blur-sm">
-                  <p className="text-xs text-white/60">Data Exposure</p>
-                  <p className="font-display text-2xl font-bold">{ratingLabel}</p>
+                <div className="glass-inset-panel px-4 py-3">
+                  <p className="text-xs text-muted-foreground">Data Exposure</p>
+                  <p className="font-display text-lg font-bold text-foreground">{ratingLabel}</p>
                 </div>
-                <div className="rounded-xl bg-white/15 px-4 py-3 backdrop-blur-sm">
-                  <p className="text-xs text-white/60">Total Breaches</p>
-                  <p className="font-display text-2xl font-bold">{totalBreaches}</p>
+                <div className="glass-inset-panel px-4 py-3">
+                  <p className="text-xs text-muted-foreground">Total Breaches</p>
+                  <p className="font-display text-2xl font-bold text-foreground">{totalBreaches}</p>
                 </div>
-                <div className="rounded-xl bg-white/15 px-4 py-3 backdrop-blur-sm">
-                  <p className="text-xs text-white/60">Avg. Score</p>
-                  <p className="font-display text-2xl font-bold">{avgScore}%</p>
+                <div className="glass-inset-panel px-4 py-3">
+                  <p className="text-xs text-muted-foreground">Avg. Score</p>
+                  <p className="font-display text-2xl font-bold text-foreground">{avgScore}%</p>
                 </div>
               </div>
             </div>
 
             {/* Gauge */}
             <div className="flex items-center justify-center">
-              <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
-                <RiskGauge score={avgScore} size={130} />
+              <div className="glass-inset-panel p-4">
+                <RiskGauge score={avgScore} size={150} />
               </div>
             </div>
           </div>
@@ -129,26 +130,26 @@ const BreachCheck: React.FC = () => {
       <div className="grid gap-4 md:grid-cols-2">
         <motion.div variants={item}>
           <div className="glass-card p-5">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Data Exposure Breakdown</h3>
-            <div className="flex items-center gap-4">
-              <div className="h-40 w-40 flex-shrink-0">
+            <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Data Exposure Breakdown</h3>
+            <div className="flex items-center gap-6">
+              <div className="h-44 w-44 flex-shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={exposureData} cx="50%" cy="50%" innerRadius={35} outerRadius={62} dataKey="value" strokeWidth={2} stroke="hsl(var(--card) / 0.5)">
+                    <Pie data={exposureData} cx="50%" cy="50%" innerRadius={40} outerRadius={70} dataKey="value" strokeWidth={3} stroke="hsl(var(--card) / 0.5)">
                       {exposureData.map((_, i) => <Cell key={i} fill={pieColors[i]} />)}
                     </Pie>
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2.5">
                 {exposureData.map((d, i) => {
                   const Icon = d.icon;
                   return (
-                    <div key={d.name} className="flex items-center gap-2">
-                      <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: pieColors[i] }} />
-                      <Icon className="h-3 w-3 text-muted-foreground" />
-                      <span className="text-xs text-foreground">{d.name}</span>
-                      <span className="text-xs text-muted-foreground">({d.value})</span>
+                    <div key={d.name} className="flex items-center gap-2.5">
+                      <div className="h-3 w-3 rounded-full" style={{ backgroundColor: pieColors[i] }} />
+                      <Icon className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm font-medium text-foreground">{d.name}</span>
+                      <span className="ml-auto text-sm font-semibold text-muted-foreground">{d.value}</span>
                     </div>
                   );
                 })}
@@ -159,8 +160,8 @@ const BreachCheck: React.FC = () => {
 
         <motion.div variants={item}>
           <div className="glass-card p-5">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Breach Sources Over Time</h3>
-            <div className="h-48">
+            <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Breach Sources Over Time</h3>
+            <div className="h-52">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={barData}>
                   <XAxis dataKey="name" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
@@ -177,34 +178,34 @@ const BreachCheck: React.FC = () => {
       <div className="space-y-4">
         {mockAccounts.map((account) => (
           <motion.div key={account.email} variants={item}>
-            <div className="glass-card p-5">
+            <div className="glass-card p-6">
               <div className="flex flex-col gap-5 md:flex-row md:items-center">
                 <div className="flex-shrink-0">
-                  <RiskGauge score={account.score} size={130} />
+                  <RiskGauge score={account.score} size={150} />
                 </div>
                 <div className="flex-1 space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-display text-base font-semibold text-foreground">{account.email}</h3>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-score-danger">
+                    <h3 className="font-display text-lg font-bold text-foreground">{account.email}</h3>
+                    <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-destructive">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-2">
                     {account.exposedData.map((d) => (
-                      <span key={d} className="rounded-full bg-score-danger/10 px-2.5 py-1 text-[11px] font-medium text-score-danger backdrop-blur-sm">{d}</span>
+                      <span key={d} className="rounded-full bg-destructive/10 px-3 py-1.5 text-xs font-semibold text-destructive">{d}</span>
                     ))}
                   </div>
                   <p className="text-sm text-muted-foreground">Found in <span className="font-bold text-foreground">{account.breaches}</span> breach{account.breaches !== 1 && "es"}</p>
-                  <div className="space-y-1.5">
+                  <div className="space-y-2">
                     {account.recentBreaches.map((b) => (
-                      <div key={b.source} className="flex items-center justify-between rounded-xl bg-muted/50 px-3 py-2 backdrop-blur-sm">
-                        <div className="flex items-center gap-2">
-                          <AlertTriangle className="h-3.5 w-3.5 text-score-warning" />
-                          <span className="text-sm text-foreground">{b.source}</span>
+                      <div key={b.source} className="flex items-center justify-between rounded-xl bg-muted/50 px-4 py-3 backdrop-blur-sm">
+                        <div className="flex items-center gap-2.5">
+                          <AlertTriangle className="h-4 w-4 text-score-warning" />
+                          <span className="text-sm font-medium text-foreground">{b.source}</span>
                         </div>
                         <div className="text-right">
                           <span className="text-xs text-muted-foreground">{b.date}</span>
-                          <span className="ml-3 text-xs text-muted-foreground">{b.records} records</span>
+                          <span className="ml-4 text-xs font-medium text-muted-foreground">{b.records} records</span>
                         </div>
                       </div>
                     ))}
