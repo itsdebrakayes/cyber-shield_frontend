@@ -7,9 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileSettings from "@/pages/mobile/MobileSettings";
 
 const Settings: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const isMobile = useIsMobile();
+
+  if (isMobile) return <MobileSettings />;
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
