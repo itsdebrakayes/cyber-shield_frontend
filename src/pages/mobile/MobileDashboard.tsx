@@ -70,7 +70,7 @@ const MobileDashboard: React.FC = () => {
   };
 
   return (
-    <motion.div variants={container} initial="hidden" animate="show" className="space-y-5 pb-24">
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-4 pb-24">
       {/* Greeting row */}
       <motion.div variants={item} className="flex items-center justify-between">
         <div>
