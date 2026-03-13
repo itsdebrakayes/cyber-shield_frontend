@@ -288,7 +288,7 @@
   inset: -30% auto auto -12%;
   width: 42%;
   height: 120%;
-  background: radial-gradient(circle, hsl(var(--cyber-blue) / 0.18) 0%, transparent 70%);
+  background: radial-gradient(circle, hsl(170 100% 50% / 0.12) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -296,7 +296,9 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, hsl(var(--cyber-purple) / 0.08), transparent 45%, hsl(var(--cyber-red) / 0.08));
+  background:
+    linear-gradient(100deg, hsl(170 100% 50% / 0.06), transparent 45%, hsl(195 70% 50% / 0.06)),
+    repeating-linear-gradient(0deg, transparent, transparent 3px, hsl(170 100% 50% / 0.03) 3px, hsl(170 100% 50% / 0.03) 4px);
   pointer-events: none;
 }
 
