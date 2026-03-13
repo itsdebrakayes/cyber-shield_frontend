@@ -70,7 +70,7 @@ const MobileDashboard: React.FC = () => {
   };
 
   return (
-    <motion.div variants={container} initial="hidden" animate="show" className="space-y-4 pb-24">
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-5 pb-24">
       {/* Greeting row */}
       <motion.div variants={item} className="flex items-center justify-between">
         <div>
@@ -93,7 +93,7 @@ const MobileDashboard: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
           >
-            <div className="mobile-score-card overflow-hidden rounded-2xl p-5">
+            <div className="mobile-score-card overflow-hidden rounded-2xl p-6">
               <div className="flex items-start gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20">
                   <Sparkles className="h-5 w-5 text-white" />
@@ -129,7 +129,7 @@ const MobileDashboard: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
           >
-            <div className="mobile-score-card overflow-hidden rounded-2xl p-5">
+            <div className="mobile-score-card overflow-hidden rounded-2xl p-6">
               <div className="flex items-center gap-4">
                 <div className="dashboard-grade-orb flex h-20 w-20 shrink-0 items-center justify-center rounded-full ring-2 ring-white/25">
                   <span className="font-display text-2xl font-extrabold text-white">{overallGrade}</span>
@@ -166,12 +166,12 @@ const MobileDashboard: React.FC = () => {
       {/* Quick actions */}
       <motion.div variants={item} className="flex gap-3">
         <Link to="/link-scanner" className="flex-1">
-          <Button variant="outline" className="w-full gap-2 rounded-xl">
+          <Button variant="outline" className="h-12 w-full gap-2 rounded-xl">
             <LinkIcon className="h-4 w-4" /> Scan URL
           </Button>
         </Link>
         <Link to="/breach-check" className="flex-1">
-          <Button variant="outline" className="w-full gap-2 rounded-xl">
+          <Button variant="outline" className="h-12 w-full gap-2 rounded-xl">
             <ShieldAlert className="h-4 w-4" /> Check Breaches
           </Button>
         </Link>
@@ -180,14 +180,14 @@ const MobileDashboard: React.FC = () => {
       {/* Service grid */}
       <motion.div variants={item}>
         <h2 className="mb-3 font-display text-sm font-semibold text-foreground">Services</h2>
-        <div className="grid grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-2 gap-3">
           {serviceCards.map((service) => {
             const Icon = service.icon;
             return (
               <Link key={service.title} to={service.path}>
                 <div className={`dashboard-service-card dashboard-service-card--${service.tone} mobile-service-tile flex flex-col items-center justify-center gap-2 p-3 text-center`}>
-                  <div className={`dashboard-service-icon dashboard-service-icon--${service.tone} !mt-0 !h-10 !w-10 !rounded-xl`}>
-                    <Icon className="h-4 w-4" />
+                  <div className={`dashboard-service-icon dashboard-service-icon--${service.tone} !mt-0 !h-12 !w-12 !rounded-xl`}>
+                    <Icon className="h-5 w-5" />
                   </div>
                   <div>
                     <p className="text-xs font-semibold text-foreground">{service.title}</p>
