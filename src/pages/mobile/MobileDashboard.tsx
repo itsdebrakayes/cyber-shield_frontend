@@ -202,7 +202,7 @@ const MobileDashboard: React.FC = () => {
       </motion.div>
 
       {/* Recent alerts */}
-      {!isNewUser && (
+      {hasAccounts && (
         <motion.div variants={item}>
           <h2 className="mb-3 font-display text-sm font-semibold text-foreground">Recent Alerts</h2>
           <div className="glass-card space-y-0 divide-y divide-border/50 overflow-hidden rounded-2xl">
