@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Video, Image, Mic, Mail, Link as LinkIcon, ShieldAlert,
-  AlertTriangle, CheckCircle, ArrowRight, X, Plus, Sparkles,
+  AlertTriangle, CheckCircle, ArrowRight, Plus, Sparkles,
 } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { Button } from "@/components/ui/button";
@@ -64,12 +64,16 @@ const item = {
 
 const Dashboard: React.FC = () => {
   const isMobile = useIsMobile();
-  const [isNewUser, setIsNewUser] = useState(() => localStorage.getItem("cybershield_welcomed") !== "true");
+  const [accounts, setAccounts] = useState<string[]>([]);
   const [newAccount, setNewAccount] = useState("");
+  const hasAccounts = accounts.length > 0;
 
-  const dismissWelcome = () => {
-    setIsNewUser(false);
-    localStorage.setItem("cybershield_welcomed", "true");
+  const handleAddAccount = () => {
+    const trimmed = newAccount.trim();
+    if (trimmed) {
+      setAccounts((prev) => [...prev, trimmed]);
+      setNewAccount("");
+    }
   };
 
   if (isMobile) return <MobileDashboard />;
@@ -80,7 +84,7 @@ const Dashboard: React.FC = () => {
       <motion.div variants={item}>
         <div className="glass-hero-purple dashboard-score-hero overflow-hidden rounded-[1.75rem] text-white">
           <AnimatePresence mode="wait">
-            {isNewUser ? (
+            {!hasAccounts ? (
               <motion.div
                 key="welcome-hero"
                 initial={{ opacity: 0 }}
@@ -116,13 +120,10 @@ const Dashboard: React.FC = () => {
                         placeholder="email or @handle"
                         className="h-9 rounded-xl border-white/20 bg-white/60 text-sm text-foreground placeholder:text-muted-foreground/60 dark:bg-white/10"
                       />
-                      <Button size="sm" className="w-full gap-1.5 rounded-xl">
+                      <Button size="sm" onClick={handleAddAccount} className="w-full gap-1.5 rounded-xl">
                         <Plus className="h-3.5 w-3.5" /> Add Account
                       </Button>
                     </div>
-                    <button onClick={dismissWelcome} className="mt-3 block w-full text-center text-xs text-foreground/40 hover:text-foreground/60">
-                      Skip for now
-                    </button>
                   </div>
                 </div>
               </motion.div>

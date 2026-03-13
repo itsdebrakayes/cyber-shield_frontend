@@ -61,12 +61,16 @@ const item = {
 };
 
 const MobileDashboard: React.FC = () => {
-  const [isNewUser, setIsNewUser] = useState(() => localStorage.getItem("cybershield_welcomed") !== "true");
+  const [accounts, setAccounts] = useState<string[]>([]);
   const [newAccount, setNewAccount] = useState("");
+  const hasAccounts = accounts.length > 0;
 
-  const dismissWelcome = () => {
-    setIsNewUser(false);
-    localStorage.setItem("cybershield_welcomed", "true");
+  const handleAddAccount = () => {
+    const trimmed = newAccount.trim();
+    if (trimmed) {
+      setAccounts((prev) => [...prev, trimmed]);
+      setNewAccount("");
+    }
   };
 
   return (
@@ -85,7 +89,7 @@ const MobileDashboard: React.FC = () => {
 
       {/* Score card OR Welcome card */}
       <AnimatePresence mode="wait">
-        {isNewUser ? (
+        {!hasAccounts ? (
           <motion.div
             key="welcome"
             variants={item}
@@ -112,12 +116,9 @@ const MobileDashboard: React.FC = () => {
                   placeholder="email or @handle"
                   className="h-10 rounded-xl border-white/20 bg-white/15 text-sm text-white placeholder:text-white/50"
                 />
-                <Button size="sm" className="w-full gap-1.5 rounded-xl bg-white/20 text-white hover:bg-white/30">
+                <Button size="sm" onClick={handleAddAccount} className="w-full gap-1.5 rounded-xl bg-white/20 text-white hover:bg-white/30">
                   <Plus className="h-3.5 w-3.5" /> Add Account
                 </Button>
-                <button onClick={dismissWelcome} className="block w-full text-center text-xs text-white/40 hover:text-white/60">
-                  Skip for now
-                </button>
               </div>
             </div>
           </motion.div>
@@ -164,7 +165,7 @@ const MobileDashboard: React.FC = () => {
       </AnimatePresence>
 
       {/* Quick actions */}
-      <motion.div variants={item} className="flex gap-3">
+      {hasAccounts && <motion.div variants={item} className="flex gap-3">
         <Link to="/link-scanner" className="flex-1">
           <Button variant="outline" className="h-12 w-full gap-2 rounded-xl">
             <LinkIcon className="h-4 w-4" /> Scan URL
@@ -175,7 +176,7 @@ const MobileDashboard: React.FC = () => {
             <ShieldAlert className="h-4 w-4" /> Check Breaches
           </Button>
         </Link>
-      </motion.div>
+      </motion.div>}
 
       {/* Service grid */}
       <motion.div variants={item}>
@@ -201,7 +202,7 @@ const MobileDashboard: React.FC = () => {
       </motion.div>
 
       {/* Recent alerts */}
-      {!isNewUser && (
+      {hasAccounts && (
         <motion.div variants={item}>
           <h2 className="mb-3 font-display text-sm font-semibold text-foreground">Recent Alerts</h2>
           <div className="glass-card space-y-0 divide-y divide-border/50 overflow-hidden rounded-2xl">
@@ -225,7 +226,7 @@ const MobileDashboard: React.FC = () => {
       )}
 
       {/* Breach sources mini */}
-      {!isNewUser && (
+      {hasAccounts && (
         <motion.div variants={item}>
           <h2 className="mb-3 font-display text-sm font-semibold text-foreground">Breach Sources</h2>
           <div className="glass-card overflow-hidden rounded-2xl p-4">
