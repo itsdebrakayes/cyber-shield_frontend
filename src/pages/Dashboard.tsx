@@ -84,7 +84,7 @@ const Dashboard: React.FC = () => {
       <motion.div variants={item}>
         <div className="glass-hero-purple dashboard-score-hero overflow-hidden rounded-[1.75rem] text-white">
           <AnimatePresence mode="wait">
-            {isNewUser ? (
+            {!hasAccounts ? (
               <motion.div
                 key="welcome-hero"
                 initial={{ opacity: 0 }}
