@@ -129,7 +129,7 @@ const MobileDashboard: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
           >
-            <div className="mobile-score-card overflow-hidden rounded-2xl p-5">
+            <div className="mobile-score-card overflow-hidden rounded-2xl p-6">
               <div className="flex items-center gap-4">
                 <div className="dashboard-grade-orb flex h-20 w-20 shrink-0 items-center justify-center rounded-full ring-2 ring-white/25">
                   <span className="font-display text-2xl font-extrabold text-white">{overallGrade}</span>
