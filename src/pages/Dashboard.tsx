@@ -120,13 +120,10 @@ const Dashboard: React.FC = () => {
                         placeholder="email or @handle"
                         className="h-9 rounded-xl border-white/20 bg-white/60 text-sm text-foreground placeholder:text-muted-foreground/60 dark:bg-white/10"
                       />
-                      <Button size="sm" className="w-full gap-1.5 rounded-xl">
+                      <Button size="sm" onClick={handleAddAccount} className="w-full gap-1.5 rounded-xl">
                         <Plus className="h-3.5 w-3.5" /> Add Account
                       </Button>
                     </div>
-                    <button onClick={dismissWelcome} className="mt-3 block w-full text-center text-xs text-foreground/40 hover:text-foreground/60">
-                      Skip for now
-                    </button>
                   </div>
                 </div>
               </motion.div>

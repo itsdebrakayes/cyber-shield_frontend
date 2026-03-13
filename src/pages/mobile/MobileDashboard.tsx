@@ -226,7 +226,7 @@ const MobileDashboard: React.FC = () => {
       )}
 
       {/* Breach sources mini */}
-      {!isNewUser && (
+      {hasAccounts && (
         <motion.div variants={item}>
           <h2 className="mb-3 font-display text-sm font-semibold text-foreground">Breach Sources</h2>
           <div className="glass-card overflow-hidden rounded-2xl p-4">
