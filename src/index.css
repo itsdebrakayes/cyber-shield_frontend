@@ -380,7 +380,7 @@
 }
 
 .dark .dashboard-service-card--video {
-  background: linear-gradient(160deg, hsl(var(--cyber-purple) / 0.28) 0%, hsl(var(--card) / 0.7) 76%);
+  background: linear-gradient(160deg, hsl(var(--cyber-light-blue) / 0.28) 0%, hsl(var(--card) / 0.7) 76%);
 }
 
 .dark .dashboard-service-card--image {
