@@ -60,7 +60,7 @@ const exposureData = [
 ];
 
 const pieColors = [
-  "hsl(var(--cyber-purple))", "hsl(var(--cyber-red))", "hsl(var(--cyber-blue))",
+  "hsl(var(--cyber-light-blue))", "hsl(var(--cyber-red))", "hsl(var(--cyber-blue))",
   "hsl(var(--cyber-yellow))", "hsl(var(--cyber-teal))",
 ];
 
