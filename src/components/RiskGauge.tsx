@@ -10,7 +10,7 @@ interface RiskGaugeProps {
 const RiskGauge: React.FC<RiskGaugeProps> = ({ score, maxScore = 100, size = 160, label }) => {
   const center = size / 2;
   const radius = (size - 36) / 2;
-  const strokeWidth = size * 0.065;
+  const strokeWidth = size * 0.075;
 
   // 270° arc: starts at 135° (bottom-left), ends at 45° (bottom-right)
   const startAngleDeg = 135;
@@ -35,28 +35,11 @@ const RiskGauge: React.FC<RiskGaugeProps> = ({ score, maxScore = 100, size = 160
     return `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`;
   };
 
-  // Tick marks along the 270° arc
-  const ticks = [];
-  for (let i = 0; i <= 20; i++) {
-    const angleDeg = startAngleDeg + (i / 20) * totalAngleDeg;
-    const rad = toRad(angleDeg);
-    const outerR = radius + strokeWidth / 2 + 2;
-    const innerR = i % 5 === 0 ? outerR + 6 : outerR + 3;
-    ticks.push({
-      x1: center + outerR * Math.cos(rad),
-      y1: center + outerR * Math.sin(rad),
-      x2: center + innerR * Math.cos(rad),
-      y2: center + innerR * Math.sin(rad),
-      major: i % 5 === 0,
-    });
-  }
-
-  // Needle
-  const needleAngleDeg = startAngleDeg + fraction * totalAngleDeg;
-  const needleRad = toRad(needleAngleDeg);
-  const needleLen = radius - 8;
-  const needleX = center + needleLen * Math.cos(needleRad);
-  const needleY = center + needleLen * Math.sin(needleRad);
+  // White dot position at the end of the filled arc
+  const dotAngleDeg = startAngleDeg + fraction * totalAngleDeg;
+  const dotRad = toRad(dotAngleDeg);
+  const dotX = center + radius * Math.cos(dotRad);
+  const dotY = center + radius * Math.sin(dotRad);
 
   const getColor = () => {
     if (fraction >= 0.7) return "hsl(var(--score-safe))";
@@ -80,17 +63,20 @@ const RiskGauge: React.FC<RiskGaugeProps> = ({ score, maxScore = 100, size = 160
 
   return (
     <div className="flex flex-col items-center gap-1">
-      <svg
-        width={size}
-        height={size}
-        viewBox={`0 0 ${size} ${size}`}
-      >
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         <defs>
           <linearGradient id={gradientId} x1="0%" y1="100%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="hsl(var(--score-danger))" />
             <stop offset="45%" stopColor="hsl(var(--score-warning))" />
             <stop offset="100%" stopColor="hsl(var(--score-safe))" />
           </linearGradient>
+          <filter id={`glow-${gradientId}`}>
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
 
         {/* Background track */}
@@ -114,40 +100,20 @@ const RiskGauge: React.FC<RiskGaugeProps> = ({ score, maxScore = 100, size = 160
           className="transition-all duration-1000 ease-out"
         />
 
-        {/* Tick marks */}
-        {ticks.map((t, i) => (
-          <line
-            key={i}
-            x1={t.x1}
-            y1={t.y1}
-            x2={t.x2}
-            y2={t.y2}
-            stroke="hsl(var(--muted-foreground))"
-            strokeWidth={t.major ? 1.5 : 0.75}
-            opacity={t.major ? 0.5 : 0.25}
-          />
-        ))}
-
-        {/* Needle */}
-        <line
-          x1={center}
-          y1={center}
-          x2={needleX}
-          y2={needleY}
-          stroke={getColor()}
-          strokeWidth="2"
-          strokeLinecap="round"
+        {/* White dot at end of filled arc */}
+        <circle
+          cx={dotX}
+          cy={dotY}
+          r={strokeWidth * 0.55}
+          fill="white"
+          filter={`url(#glow-${gradientId})`}
           className="transition-all duration-1000 ease-out"
         />
-
-        {/* Center dot */}
-        <circle cx={center} cy={center} r={size * 0.03} fill={getColor()} />
-        <circle cx={center} cy={center} r={size * 0.015} fill="hsl(var(--background))" />
 
         {/* "Score" label */}
         <text
           x={center}
-          y={center - size * 0.12}
+          y={center - size * 0.1}
           textAnchor="middle"
           className="fill-muted-foreground"
           fontSize={size * 0.065}
@@ -161,10 +127,10 @@ const RiskGauge: React.FC<RiskGaugeProps> = ({ score, maxScore = 100, size = 160
         {/* Score number */}
         <text
           x={center}
-          y={center + size * 0.06}
+          y={center + size * 0.08}
           textAnchor="middle"
           className="fill-foreground"
-          fontSize={size * 0.22}
+          fontSize={size * 0.24}
           fontWeight="700"
           fontFamily="'Space Grotesk', sans-serif"
         >
@@ -173,8 +139,8 @@ const RiskGauge: React.FC<RiskGaugeProps> = ({ score, maxScore = 100, size = 160
 
         {/* Scale labels: 0 and max */}
         <text
-          x={center + (labelR) * Math.cos(startLabelRad)}
-          y={center + (labelR) * Math.sin(startLabelRad)}
+          x={center + labelR * Math.cos(startLabelRad)}
+          y={center + labelR * Math.sin(startLabelRad)}
           textAnchor="middle"
           className="fill-muted-foreground"
           fontSize={size * 0.055}
@@ -183,8 +149,8 @@ const RiskGauge: React.FC<RiskGaugeProps> = ({ score, maxScore = 100, size = 160
           0
         </text>
         <text
-          x={center + (labelR) * Math.cos(endLabelRad)}
-          y={center + (labelR) * Math.sin(endLabelRad)}
+          x={center + labelR * Math.cos(endLabelRad)}
+          y={center + labelR * Math.sin(endLabelRad)}
           textAnchor="middle"
           className="fill-muted-foreground"
           fontSize={size * 0.055}

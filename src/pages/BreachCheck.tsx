@@ -288,36 +288,22 @@ const BreachCheck: React.FC = () => {
                   </div>
                 </motion.div>
 
-                {/* Donut chart */}
+                {/* Donut chart — custom SVG matching reference style */}
                 <motion.div variants={item}>
                   <div className="glass-card rounded-2xl p-5">
                     <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Data Exposure</h3>
-                    <div className="flex items-center gap-3 overflow-hidden">
-                      <div className="relative h-36 w-36 flex-shrink-0">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <PieChart>
-                            <Pie data={exposureData} cx="50%" cy="50%" innerRadius={38} outerRadius={62} dataKey="value" strokeWidth={3} stroke="hsl(var(--card) / 0.5)">
-                              {exposureData.map((_, i) => <Cell key={i} fill={pieColors[i]} />)}
-                            </Pie>
-                          </PieChart>
-                        </ResponsiveContainer>
-                        <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <span className="font-display text-xl font-bold text-foreground">{totalExposure}</span>
-                          <span className="text-[10px] text-muted-foreground">Total</span>
-                        </div>
+                    <div className="flex items-center gap-5">
+                      <div className="relative flex-shrink-0">
+                        <DonutChart data={exposureData} colors={pieColors} size={140} total={totalExposure} />
                       </div>
-                      <div className="min-w-0 flex-1 space-y-2">
-                        {exposureData.map((d, i) => {
-                          const Icon = d.icon;
-                          return (
-                            <div key={d.name} className="flex items-center gap-2">
-                              <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: pieColors[i] }} />
-                              <Icon className="h-3.5 w-3.5 text-muted-foreground" />
-                              <span className="text-xs font-medium text-foreground">{d.name}</span>
-                              <span className="ml-auto text-xs font-semibold text-muted-foreground">{d.value}</span>
-                            </div>
-                          );
-                        })}
+                      <div className="min-w-0 flex-1 space-y-3">
+                        {exposureData.map((d, i) => (
+                          <div key={d.name} className="flex items-center gap-2.5">
+                            <div className="h-3 w-3 rounded-full flex-shrink-0" style={{ backgroundColor: pieColors[i] }} />
+                            <span className="text-xs font-medium text-foreground">{d.name}</span>
+                            <span className="ml-auto text-xs font-bold text-foreground">{d.value}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
