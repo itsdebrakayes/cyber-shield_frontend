@@ -82,7 +82,7 @@ const Dashboard: React.FC = () => {
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
       {/* Score hero OR Welcome hero */}
       <motion.div variants={item}>
-        <div className="<div className="glass-hero-blue dashboard-score-hero overflow-hidden rounded-[1.75rem] text-white"> dashboard-score-hero overflow-hidden rounded-[1.75rem] text-white">
+        <div className="glass-hero-blue dashboard-score-hero overflow-hidden rounded-[1.75rem] text-white">
           <AnimatePresence mode="wait">
             {!hasAccounts ? (
               <motion.div
