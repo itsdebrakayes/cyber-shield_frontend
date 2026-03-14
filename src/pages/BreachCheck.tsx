@@ -178,7 +178,7 @@ const BreachCheck: React.FC = () => {
       {showCentered ? (
         <motion.div variants={item} className="w-full max-w-xl space-y-6 text-center">
           <div className="flex flex-col items-center gap-3">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyber-red/20 to-cyber-purple/20 text-cyber-red">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyber-red/20 to-cyber-light-blue/20 text-cyber-red">
               <ShieldAlert className="h-8 w-8" />
             </div>
             <h1 className="font-display text-2xl font-bold text-foreground">Breach Check</h1>
