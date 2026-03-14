@@ -43,8 +43,8 @@ const MobileImageDetection: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="w-full text-center"
         >
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
-            <ScanLine className="h-8 w-8 text-primary" />
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyber-blue/20 to-cyber-purple/20">
+            <ScanLine className="h-8 w-8 text-cyber-blue" />
           </div>
           <h1 className="font-display text-2xl font-bold text-foreground mb-1">Image Detection</h1>
           <p className="text-sm text-muted-foreground mb-6">Upload an image to check for AI manipulation</p>

@@ -46,6 +46,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Ambient color splotches */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -left-32 -top-32 h-[500px] w-[500px] rounded-full bg-cyber-purple/15 blur-[120px]" />
+        <div className="absolute -right-24 top-1/4 h-[400px] w-[400px] rounded-full bg-cyber-teal/12 blur-[120px]" />
+        <div className="absolute bottom-0 left-1/3 h-[450px] w-[450px] rounded-full bg-cyber-blue/10 blur-[120px]" />
+        <div className="absolute -bottom-20 right-1/4 h-[350px] w-[350px] rounded-full bg-cyber-red/8 blur-[100px]" />
+      </div>
       {/* Top bar: nav center, actions right */}
       <div className="sticky top-0 z-50 px-4 pt-4">
         <div className="mx-auto flex max-w-7xl items-center justify-between">

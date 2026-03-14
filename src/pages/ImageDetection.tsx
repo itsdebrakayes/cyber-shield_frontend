@@ -64,8 +64,8 @@ const ImageDetection: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-xl text-center"
         >
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/10">
-            <ScanLine className="h-10 w-10 text-primary" />
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-cyber-blue/20 to-cyber-purple/20">
+            <ScanLine className="h-10 w-10 text-cyber-blue" />
           </div>
           <h1 className="font-display text-3xl font-bold text-foreground mb-2">Image Detection</h1>
           <p className="text-muted-foreground mb-8">Upload an image to scan for AI-generated artifacts and deepfake indicators</p>

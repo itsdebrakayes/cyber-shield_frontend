@@ -43,8 +43,8 @@ const MobileAudioDetection: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="w-full text-center"
         >
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
-            <AudioLines className="h-8 w-8 text-primary" />
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyber-teal/20 to-cyber-green/20">
+            <AudioLines className="h-8 w-8 text-cyber-teal" />
           </div>
           <h1 className="font-display text-2xl font-bold text-foreground mb-1">Audio Detection</h1>
           <p className="text-sm text-muted-foreground mb-6">Detect synthetic voice patterns and AI manipulation</p>

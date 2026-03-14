@@ -56,8 +56,8 @@ const MobileLinkScanner: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="w-full text-center"
         >
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
-            <Globe className="h-8 w-8 text-primary" />
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyber-green/20 to-cyber-teal/20">
+            <Globe className="h-8 w-8 text-cyber-green" />
           </div>
           <h1 className="font-display text-2xl font-bold text-foreground mb-1">Link Scanner</h1>
           <p className="text-sm text-muted-foreground mb-6">Paste any URL to check for threats</p>
