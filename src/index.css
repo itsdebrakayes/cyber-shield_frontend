@@ -410,7 +410,7 @@
 }
 
 .dashboard-service-accent--video {
-  background: linear-gradient(90deg, hsl(var(--cyber-purple)), hsl(var(--cyber-purple) / 0.3));
+  background: linear-gradient(90deg, hsl(var(--cyber-light-blue)), hsl(var(--cyber-light-blue) / 0.3));
 }
 
 .dashboard-service-accent--image {
