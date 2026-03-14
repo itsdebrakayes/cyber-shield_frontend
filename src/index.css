@@ -445,8 +445,8 @@
 }
 
 .dashboard-service-icon--video {
-  background: hsl(var(--cyber-purple) / 0.2);
-  color: hsl(var(--cyber-purple-foreground));
+  background: hsl(var(--cyber-light-blue) / 0.2);
+  color: hsl(var(--cyber-light-blue-foreground));
 }
 
 .dashboard-service-icon--image {

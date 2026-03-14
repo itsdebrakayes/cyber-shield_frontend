@@ -113,7 +113,7 @@ const VideoDetection: React.FC = () => {
                   <p className="mt-2 font-display text-lg font-bold text-score-danger">{result.verdict}</p>
                 </CardContent></Card>
 
-                <Card><CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-sm"><Clock className="h-4 w-4 text-cyber-purple" /> Detection Timeline</CardTitle></CardHeader>
+                <Card><CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-sm"><Clock className="h-4 w-4 text-cyber-light-blue" /> Detection Timeline</CardTitle></CardHeader>
                   <CardContent><div className="space-y-3">
                     {result.timeline.map((t, i) => (
                       <div key={i} className={`flex items-start gap-3 rounded-lg p-3 ${severityBg(t.severity)}`}>

@@ -62,7 +62,7 @@ const MobileBreachCheck: React.FC = () => {
       {showCentered ? (
         <motion.div variants={item} className="w-full space-y-5 text-center px-2">
           <div className="flex flex-col items-center gap-2">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyber-red/20 to-cyber-purple/20 text-cyber-red">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyber-red/20 to-cyber-light-blue/20 text-cyber-red">
               <ShieldAlert className="h-7 w-7" />
             </div>
             <h1 className="font-display text-xl font-bold text-foreground">Breach Check</h1>

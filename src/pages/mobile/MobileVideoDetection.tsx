@@ -109,7 +109,7 @@ const MobileVideoDetection: React.FC = () => {
                 </div>
                 <div className="glass-card rounded-2xl p-4">
                   <h3 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                    <Clock className="h-3.5 w-3.5 text-cyber-purple" /> Timeline
+                    <Clock className="h-3.5 w-3.5 text-cyber-light-blue" /> Timeline
                   </h3>
                   <div className="space-y-2">
                     {result.timeline.map((t, i) => (
