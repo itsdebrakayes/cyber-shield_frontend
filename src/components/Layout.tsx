@@ -130,8 +130,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   <User className="h-[18px] w-[18px]" />
                 </Button>
               </DropdownMenuTrigger>
-               <DropdownMenuContent align="end">
-               <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end">
                 {user && (
                   <div className="px-2 py-1.5 text-xs text-muted-foreground border-b border-border mb-1">
                     <div className="font-medium text-foreground">{user.fullName}</div>
