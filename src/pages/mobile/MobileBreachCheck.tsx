@@ -25,7 +25,7 @@ const pieColors = ["hsl(var(--cyber-light-blue))", "hsl(var(--cyber-red))", "hsl
 
 const statCards = [
   { label: "Threats", value: "7", icon: Shield, color: "cyber-red" },
-  { label: "Email Risk", value: "64%", icon: Mail, color: "cyber-purple" },
+  { label: "Email Risk", value: "64%", icon: Mail, color: "cyber-light-blue" },
   { label: "Passwords", value: "42%", icon: Key, color: "cyber-yellow" },
   { label: "Leaks", value: "5", icon: Database, color: "cyber-teal" },
 ];
