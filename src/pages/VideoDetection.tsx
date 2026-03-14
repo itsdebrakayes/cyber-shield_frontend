@@ -84,7 +84,7 @@ const VideoDetection: React.FC = () => {
             ) : (
               <div className="flex flex-col items-center gap-4">
                 <div className="flex items-center gap-3 rounded-lg bg-muted px-4 py-3">
-                  <Video className="h-8 w-8 text-cyber-purple" />
+                  <Video className="h-8 w-8 text-cyber-light-blue" />
                   <div><p className="text-sm font-medium text-foreground">{file.name}</p><p className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(1)} MB</p></div>
                 </div>
                 <div className="flex gap-3">
