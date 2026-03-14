@@ -21,7 +21,7 @@ const exposureData = [
   { name: "Email", value: 6 }, { name: "Password", value: 4 }, { name: "Phone", value: 2 },
   { name: "IP", value: 3 }, { name: "Username", value: 5 },
 ];
-const pieColors = ["hsl(var(--cyber-purple))", "hsl(var(--cyber-red))", "hsl(var(--cyber-blue))", "hsl(var(--cyber-yellow))", "hsl(var(--cyber-teal))"];
+const pieColors = ["hsl(var(--cyber-light-blue))", "hsl(var(--cyber-red))", "hsl(var(--cyber-blue))", "hsl(var(--cyber-yellow))", "hsl(var(--cyber-teal))"];
 
 const statCards = [
   { label: "Threats", value: "7", icon: Shield, color: "cyber-red" },
