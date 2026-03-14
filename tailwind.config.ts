@@ -103,6 +103,22 @@ export default {
           "0%": { transform: "translateY(0%)" },
           "100%": { transform: "translateY(100%)" },
         },
+        "splotch-drift-1": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)", opacity: "0.15" },
+          "50%": { transform: "translate(40px, 30px) scale(1.1)", opacity: "0.25" },
+        },
+        "splotch-drift-2": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)", opacity: "0.1" },
+          "50%": { transform: "translate(-30px, 40px) scale(1.15)", opacity: "0.2" },
+        },
+        "splotch-drift-3": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)", opacity: "0.1" },
+          "50%": { transform: "translate(50px, -20px) scale(1.05)", opacity: "0.18" },
+        },
+        "splotch-drift-4": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)", opacity: "0.1" },
+          "50%": { transform: "translate(-40px, -30px) scale(1.12)", opacity: "0.18" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
