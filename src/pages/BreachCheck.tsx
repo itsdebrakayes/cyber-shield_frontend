@@ -306,7 +306,7 @@ const BreachCheck: React.FC = () => {
                           <span className="text-[10px] text-muted-foreground">Total</span>
                         </div>
                       </div>
-                      <div className="space-y-2">
+                      <div className="min-w-0 flex-1 space-y-2">
                         {exposureData.map((d, i) => {
                           const Icon = d.icon;
                           return (
