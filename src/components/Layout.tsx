@@ -43,8 +43,14 @@ const navLinks = [
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { theme, toggleTheme } = useTheme();
+  const { user, signOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
+  const handleSignOut = () => {
+    signOut();
+    navigate("/login");
+  };
   return (
     <div className="min-h-screen bg-background">
       {/* Ambient color splotches */}
