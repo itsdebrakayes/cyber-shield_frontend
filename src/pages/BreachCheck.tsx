@@ -4,7 +4,7 @@ import { ShieldAlert, Search, Plus, Trash2, AlertTriangle, Lock, Eye, Mail, Phon
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import RiskGauge from "@/components/RiskGauge";
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileBreachCheck from "@/pages/mobile/MobileBreachCheck";
 
@@ -85,6 +85,64 @@ interface LookupResult {
   exposedData: string[];
   recentBreaches: { source: string; date: string; records: string }[];
 }
+
+// Custom SVG Donut Chart matching reference aesthetic
+const DonutChart: React.FC<{
+  data: { name: string; value: number }[];
+  colors: string[];
+  size: number;
+  total: number;
+}> = ({ data, colors, size, total }) => {
+  const center = size / 2;
+  const outerR = size / 2 - 4;
+  const innerR = outerR * 0.6;
+  const gapAngle = 3;
+
+  const segments: { startAngle: number; endAngle: number; color: string }[] = [];
+  let currentAngle = -90;
+  data.forEach((d, i) => {
+    const sweepAngle = (d.value / total) * (360 - gapAngle * data.length);
+    segments.push({
+      startAngle: currentAngle + gapAngle / 2,
+      endAngle: currentAngle + sweepAngle + gapAngle / 2,
+      color: colors[i],
+    });
+    currentAngle += sweepAngle + gapAngle;
+  });
+
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+
+  const arcPathD = (startDeg: number, endDeg: number, oR: number, iR: number) => {
+    const s1 = toRad(startDeg);
+    const s2 = toRad(endDeg);
+    const largeArc = endDeg - startDeg > 180 ? 1 : 0;
+    const ox1 = center + oR * Math.cos(s1);
+    const oy1 = center + oR * Math.sin(s1);
+    const ox2 = center + oR * Math.cos(s2);
+    const oy2 = center + oR * Math.sin(s2);
+    const ix1 = center + iR * Math.cos(s2);
+    const iy1 = center + iR * Math.sin(s2);
+    const ix2 = center + iR * Math.cos(s1);
+    const iy2 = center + iR * Math.sin(s1);
+    return `M ${ox1} ${oy1} A ${oR} ${oR} 0 ${largeArc} 1 ${ox2} ${oy2} L ${ix1} ${iy1} A ${iR} ${iR} 0 ${largeArc} 0 ${ix2} ${iy2} Z`;
+  };
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      {segments.map((seg, i) => (
+        <path
+          key={i}
+          d={arcPathD(seg.startAngle, seg.endAngle, outerR, innerR)}
+          fill={seg.color}
+          className="transition-all duration-700 ease-out"
+          style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))" }}
+        />
+      ))}
+      <text x={center} y={center - 6} textAnchor="middle" className="fill-muted-foreground" fontSize="10" fontWeight="500">Total</text>
+      <text x={center} y={center + 14} textAnchor="middle" className="fill-foreground" fontSize="22" fontWeight="700" fontFamily="'Space Grotesk', sans-serif">{total}</text>
+    </svg>
+  );
+};
 
 const BreachCheck: React.FC = () => {
   const isMobile = useIsMobile();
@@ -288,36 +346,22 @@ const BreachCheck: React.FC = () => {
                   </div>
                 </motion.div>
 
-                {/* Donut chart */}
+                {/* Donut chart — custom SVG matching reference style */}
                 <motion.div variants={item}>
                   <div className="glass-card rounded-2xl p-5">
                     <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Data Exposure</h3>
-                    <div className="flex items-center gap-3 overflow-hidden">
-                      <div className="relative h-36 w-36 flex-shrink-0">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <PieChart>
-                            <Pie data={exposureData} cx="50%" cy="50%" innerRadius={38} outerRadius={62} dataKey="value" strokeWidth={3} stroke="hsl(var(--card) / 0.5)">
-                              {exposureData.map((_, i) => <Cell key={i} fill={pieColors[i]} />)}
-                            </Pie>
-                          </PieChart>
-                        </ResponsiveContainer>
-                        <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <span className="font-display text-xl font-bold text-foreground">{totalExposure}</span>
-                          <span className="text-[10px] text-muted-foreground">Total</span>
-                        </div>
+                    <div className="flex items-center gap-5">
+                      <div className="relative flex-shrink-0">
+                        <DonutChart data={exposureData} colors={pieColors} size={140} total={totalExposure} />
                       </div>
-                      <div className="min-w-0 flex-1 space-y-2">
-                        {exposureData.map((d, i) => {
-                          const Icon = d.icon;
-                          return (
-                            <div key={d.name} className="flex items-center gap-2">
-                              <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: pieColors[i] }} />
-                              <Icon className="h-3.5 w-3.5 text-muted-foreground" />
-                              <span className="text-xs font-medium text-foreground">{d.name}</span>
-                              <span className="ml-auto text-xs font-semibold text-muted-foreground">{d.value}</span>
-                            </div>
-                          );
-                        })}
+                      <div className="min-w-0 flex-1 space-y-3">
+                        {exposureData.map((d, i) => (
+                          <div key={d.name} className="flex items-center gap-2.5">
+                            <div className="h-3 w-3 rounded-full flex-shrink-0" style={{ backgroundColor: pieColors[i] }} />
+                            <span className="text-xs font-medium text-foreground">{d.name}</span>
+                            <span className="ml-auto text-xs font-bold text-foreground">{d.value}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
