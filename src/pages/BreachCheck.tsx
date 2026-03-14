@@ -210,7 +210,7 @@ const BreachCheck: React.FC = () => {
         <>
           {/* Section 1: Public Breach Lookup */}
           <motion.div variants={item}>
-            <div className="glass-hero-purple overflow-hidden rounded-2xl p-6 text-white">
+            <div className="glass-hero-blue overflow-hidden rounded-2xl p-6 text-white">
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
                   <Search className="h-6 w-6" />
