@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Send, AlertTriangle, CheckCircle, XCircle, Link as LinkIcon } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -42,61 +41,93 @@ const EmailAnalysis: React.FC = () => {
 
   if (isMobile) return <MobileEmailAnalysis />;
 
+  const showCentered = !result && !scanning;
+
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-bold text-foreground">Email / Phishing Analysis</h1>
-        <p className="text-sm text-muted-foreground">Paste a raw email to scan for phishing and malicious links</p>
-      </div>
-
-      <Card><CardContent className="space-y-4 p-6">
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2"><Label>Sender Email</Label><Input placeholder="sender@example.com" value={sender} onChange={(e) => setSender(e.target.value)} /></div>
-          <div className="space-y-2"><Label>Subject</Label><Input placeholder="Email subject line" value={subject} onChange={(e) => setSubject(e.target.value)} /></div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className={showCentered ? "flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center" : "space-y-6"}
+    >
+      {showCentered ? (
+        <div className="w-full max-w-xl space-y-6 text-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyber-yellow/20 to-cyber-purple/20 text-cyber-yellow">
+              <Mail className="h-8 w-8" />
+            </div>
+            <h1 className="font-display text-2xl font-bold text-foreground">Email Analysis</h1>
+            <p className="text-sm text-muted-foreground max-w-sm">Paste an email to scan for phishing attempts and malicious links</p>
+          </div>
+          <div className="glass-card rounded-2xl p-6 space-y-4 text-left">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2"><Label>Sender Email</Label><Input placeholder="sender@example.com" value={sender} onChange={(e) => setSender(e.target.value)} /></div>
+              <div className="space-y-2"><Label>Subject</Label><Input placeholder="Email subject line" value={subject} onChange={(e) => setSubject(e.target.value)} /></div>
+            </div>
+            <div className="space-y-2"><Label>Email Body</Label><Textarea placeholder="Paste the full email body here…" rows={6} value={body} onChange={(e) => setBody(e.target.value)} /></div>
+            <Button onClick={handleScan} disabled={scanning || !body} className="w-full">
+              {scanning ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" /> : <><Send className="mr-2 h-4 w-4" /> Analyze Email</>}
+            </Button>
+          </div>
         </div>
-        <div className="space-y-2"><Label>Email Body</Label><Textarea placeholder="Paste the full email body here…" rows={6} value={body} onChange={(e) => setBody(e.target.value)} /></div>
-        <Button onClick={handleScan} disabled={scanning || !body}>
-          {scanning ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" /> : <><Send className="mr-2 h-4 w-4" /> Analyze Email</>}
-        </Button>
-      </CardContent></Card>
+      ) : (
+        <>
+          {scanning && (
+            <div className="glass-card flex flex-col items-center rounded-2xl py-16">
+              <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+              <p className="font-display text-lg font-semibold text-foreground">Analyzing email content…</p>
+            </div>
+          )}
 
-      {scanning && (
-        <Card><CardContent className="flex flex-col items-center py-16">
-          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <p className="font-display text-lg font-semibold text-foreground">Analyzing email content…</p>
-        </CardContent></Card>
-      )}
-
-      <AnimatePresence>
-        {result && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-            <Card><CardContent className="flex flex-col items-center py-8">
-              <RiskGauge score={result.score} size={200} label="Safety" />
-              <p className="mt-2 font-display text-lg font-bold text-score-danger">{result.verdict}</p>
-            </CardContent></Card>
-
-            <Card><CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-sm"><LinkIcon className="h-4 w-4 text-cyber-blue" /> Extracted URLs</CardTitle></CardHeader>
-              <CardContent><div className="space-y-2">
-                {result.extractedUrls.map((u, i) => (
-                  <div key={i} className="flex items-center justify-between rounded-lg bg-muted p-3">
-                    <span className="truncate text-sm text-foreground">{u.url}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-muted-foreground">{u.score}/100</span>
-                      {u.verdict === "Safe" ? <CheckCircle className="h-4 w-4 text-score-safe" /> : u.verdict === "Suspicious" ? <AlertTriangle className="h-4 w-4 text-score-warning" /> : <XCircle className="h-4 w-4 text-score-danger" />}
-                    </div>
+          <AnimatePresence>
+            {result && (
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+                {/* Re-scan form */}
+                <div className="glass-card rounded-2xl p-6 space-y-4">
+                  <h2 className="font-display text-lg font-bold text-foreground flex items-center gap-2"><Mail className="h-5 w-5 text-cyber-yellow" /> Scan Another Email</h2>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2"><Label>Sender Email</Label><Input placeholder="sender@example.com" value={sender} onChange={(e) => setSender(e.target.value)} /></div>
+                    <div className="space-y-2"><Label>Subject</Label><Input placeholder="Email subject line" value={subject} onChange={(e) => setSubject(e.target.value)} /></div>
                   </div>
-                ))}
-              </div></CardContent></Card>
+                  <div className="space-y-2"><Label>Email Body</Label><Textarea placeholder="Paste the full email body here…" rows={4} value={body} onChange={(e) => setBody(e.target.value)} /></div>
+                  <Button onClick={handleScan} disabled={!body}>
+                    <Send className="mr-2 h-4 w-4" /> Re-Analyze
+                  </Button>
+                </div>
 
-            <Card><CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-sm"><AlertTriangle className="h-4 w-4 text-score-danger" /> Suspicious Patterns</CardTitle></CardHeader>
-              <CardContent><ul className="space-y-2">
-                {result.patterns.map((p, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm"><XCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-score-danger" /><span className="text-foreground">{p}</span></li>
-                ))}
-              </ul></CardContent></Card>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                {/* Results */}
+                <div className="glass-card flex flex-col items-center rounded-2xl py-8">
+                  <RiskGauge score={result.score} size={200} label="Safety" />
+                  <p className="mt-2 font-display text-lg font-bold text-score-danger">{result.verdict}</p>
+                </div>
+
+                <div className="glass-card rounded-2xl p-6">
+                  <h3 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground"><LinkIcon className="h-4 w-4 text-cyber-blue" /> Extracted URLs</h3>
+                  <div className="space-y-2">
+                    {result.extractedUrls.map((u, i) => (
+                      <div key={i} className="flex items-center justify-between rounded-xl bg-muted/50 p-3">
+                        <span className="truncate text-sm text-foreground">{u.url}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-medium text-muted-foreground">{u.score}/100</span>
+                          {u.verdict === "Safe" ? <CheckCircle className="h-4 w-4 text-score-safe" /> : u.verdict === "Suspicious" ? <AlertTriangle className="h-4 w-4 text-score-warning" /> : <XCircle className="h-4 w-4 text-score-danger" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="glass-card rounded-2xl p-6">
+                  <h3 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground"><AlertTriangle className="h-4 w-4 text-score-danger" /> Suspicious Patterns</h3>
+                  <ul className="space-y-2">
+                    {result.patterns.map((p, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm"><XCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-score-danger" /><span className="text-foreground">{p}</span></li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </>
+      )}
     </motion.div>
   );
 };

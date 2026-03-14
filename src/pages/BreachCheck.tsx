@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { ShieldAlert, Search, Plus, Trash2, AlertTriangle, Lock, Eye, Mail, Phone, Globe, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ShieldAlert, Search, Plus, Trash2, AlertTriangle, Lock, Eye, Mail, Phone, Globe, Loader2, Shield, Database, Key } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import RiskGauge from "@/components/RiskGauge";
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileBreachCheck from "@/pages/mobile/MobileBreachCheck";
 
@@ -72,6 +72,13 @@ const barData = [
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.07 } } };
 const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
 
+const statCards = [
+  { label: "Total Threats", value: "7", icon: Shield, color: "cyber-red" },
+  { label: "Email Risk", value: "64%", icon: Mail, color: "cyber-purple" },
+  { label: "Password Risk", value: "42%", icon: Key, color: "cyber-yellow" },
+  { label: "Data Leaks", value: "5", icon: Database, color: "cyber-teal" },
+];
+
 interface LookupResult {
   score: number;
   breaches: number;
@@ -85,9 +92,11 @@ const BreachCheck: React.FC = () => {
   const [lookupResult, setLookupResult] = useState<LookupResult | null>(null);
   const [isChecking, setIsChecking] = useState(false);
   const [newEmail, setNewEmail] = useState("");
+  const [hasAccounts] = useState(true); // toggle to false to show empty state
 
   const totalBreaches = mockAccounts.reduce((sum, a) => sum + a.breaches, 0);
   const avgScore = Math.round(mockAccounts.reduce((sum, a) => sum + a.score, 0) / mockAccounts.length);
+  const totalExposure = exposureData.reduce((s, d) => s + d.value, 0);
 
   const handleLookup = () => {
     if (!lookupEmail.trim()) return;
@@ -102,186 +111,272 @@ const BreachCheck: React.FC = () => {
 
   if (isMobile) return <MobileBreachCheck />;
 
+  const showCentered = !lookupResult && !isChecking && !hasAccounts;
+
   return (
-    <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
-      {/* Section 1: Public Breach Lookup */}
-      <motion.div variants={item}>
-        <div className="glass-hero-purple overflow-hidden rounded-2xl p-6 text-white">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
-              <Search className="h-6 w-6" />
+    <motion.div variants={container} initial="hidden" animate="show" className={showCentered ? "flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center" : "space-y-6"}>
+
+      {/* Centered empty state when no accounts and no lookup */}
+      {showCentered ? (
+        <motion.div variants={item} className="w-full max-w-xl space-y-6 text-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyber-red/20 to-cyber-purple/20 text-cyber-red">
+              <ShieldAlert className="h-8 w-8" />
             </div>
-            <div>
-              <h1 className="font-display text-2xl font-bold">Breach Lookup</h1>
-              <p className="text-sm text-white/70">Check any email for known data breaches</p>
+            <h1 className="font-display text-2xl font-bold text-foreground">Breach Check</h1>
+            <p className="text-sm text-muted-foreground max-w-sm">Check any email for known data breaches or add accounts to continuously monitor</p>
+          </div>
+          <div className="glass-card rounded-2xl p-6 space-y-4">
+            <div className="flex gap-3">
+              <Input
+                placeholder="Enter email to check for breaches…"
+                value={lookupEmail}
+                onChange={(e) => setLookupEmail(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleLookup()}
+              />
+              <Button onClick={handleLookup} disabled={!lookupEmail.trim()} className="shrink-0">
+                <Search className="mr-2 h-4 w-4" /> Check
+              </Button>
             </div>
-          </div>
-          <div className="flex gap-3">
-            <Input
-              placeholder="Enter any email address to check…"
-              value={lookupEmail}
-              onChange={(e) => setLookupEmail(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleLookup()}
-              className="border-white/20 bg-white/10 text-white placeholder:text-white/50 focus-visible:ring-white/30"
-            />
-            <Button onClick={handleLookup} disabled={isChecking || !lookupEmail.trim()} className="shrink-0 bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm">
-              {isChecking ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Search className="mr-2 h-4 w-4" />}
-              {isChecking ? "Scanning…" : "Check"}
-            </Button>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Lookup Results */}
-      {(isChecking || lookupResult) && (
-        <motion.div variants={item} initial="hidden" animate="show">
-          <div className="glass-card overflow-hidden rounded-2xl p-6">
-            {isChecking ? (
-              <div className="flex flex-col items-center justify-center py-10 gap-3">
-                <Loader2 className="h-10 w-10 animate-spin text-primary" />
-                <p className="text-sm text-muted-foreground">Scanning breach databases for <span className="font-semibold text-foreground">{lookupEmail}</span>…</p>
-              </div>
-            ) : lookupResult && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-display text-lg font-bold text-foreground">Results for {lookupEmail}</h3>
-                  <span className={`rounded-full px-3 py-1 text-xs font-bold ${lookupResult.score >= 70 ? "bg-score-safe/10 text-score-safe" : lookupResult.score >= 40 ? "bg-score-warning/10 text-score-warning" : "bg-score-danger/10 text-score-danger"}`}>
-                    {lookupResult.score >= 70 ? "Low Risk" : lookupResult.score >= 40 ? "Moderate Risk" : "High Risk"}
-                  </span>
-                </div>
-                <div className="flex flex-col gap-5 md:flex-row md:items-center">
-                  <div className="flex-shrink-0">
-                    <RiskGauge score={lookupResult.score} size={150} />
-                  </div>
-                  <div className="flex-1 space-y-3">
-                    <div className="flex flex-wrap gap-2">
-                      {lookupResult.exposedData.map((d) => (
-                        <span key={d} className="rounded-full bg-destructive/10 px-3 py-1.5 text-xs font-semibold text-destructive">{d}</span>
-                      ))}
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Found in <span className="font-bold text-foreground">{lookupResult.breaches}</span> breach{lookupResult.breaches !== 1 && "es"}
-                    </p>
-                    <div className="space-y-2">
-                      {lookupResult.recentBreaches.map((b) => (
-                        <div key={b.source} className="flex items-center justify-between rounded-xl bg-muted/50 px-4 py-3 backdrop-blur-sm">
-                          <div className="flex items-center gap-2.5">
-                            <AlertTriangle className="h-4 w-4 text-score-warning" />
-                            <span className="text-sm font-medium text-foreground">{b.source}</span>
-                          </div>
-                          <div className="text-right">
-                            <span className="text-xs text-muted-foreground">{b.date}</span>
-                            <span className="ml-4 text-xs font-medium text-muted-foreground">{b.records} records</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </motion.div>
-      )}
-
-      {/* Section 2: Personal Monitoring */}
-      <motion.div variants={item}>
-        <div className="flex items-center gap-3 mb-2">
-          <ShieldAlert className="h-5 w-5 text-muted-foreground" />
-          <h2 className="font-display text-lg font-bold text-foreground">Your Monitored Accounts</h2>
-          <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
-            <span>{mockAccounts.length} accounts</span>
-            <span>·</span>
-            <span>{totalBreaches} breaches</span>
-            <span>·</span>
-            <span>Avg {avgScore}%</span>
-          </div>
-        </div>
-      </motion.div>
-
-      <motion.div variants={item}>
-        <div className="glass-card flex gap-3 p-4">
-          <Input placeholder="Add email to ongoing monitoring…" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} className="border-white/10 bg-transparent" />
-          <Button className="shrink-0"><Plus className="mr-2 h-4 w-4" /> Monitor</Button>
-        </div>
-      </motion.div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <motion.div variants={item}>
-          <div className="glass-card p-5">
-            <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Data Exposure Breakdown</h3>
-            <div className="flex items-center gap-6">
-              <div className="h-44 w-44 flex-shrink-0">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart><Pie data={exposureData} cx="50%" cy="50%" innerRadius={40} outerRadius={70} dataKey="value" strokeWidth={3} stroke="hsl(var(--card) / 0.5)">
-                    {exposureData.map((_, i) => <Cell key={i} fill={pieColors[i]} />)}
-                  </Pie></PieChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="space-y-2.5">
-                {exposureData.map((d, i) => {
-                  const Icon = d.icon;
-                  return (
-                    <div key={d.name} className="flex items-center gap-2.5">
-                      <div className="h-3 w-3 rounded-full" style={{ backgroundColor: pieColors[i] }} />
-                      <Icon className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm font-medium text-foreground">{d.name}</span>
-                      <span className="ml-auto text-sm font-semibold text-muted-foreground">{d.value}</span>
-                    </div>
-                  );
-                })}
-              </div>
+            <div className="relative flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
+              <span className="relative bg-card px-3 text-xs text-muted-foreground">or</span>
+            </div>
+            <div className="flex gap-3">
+              <Input placeholder="Add email for ongoing monitoring…" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
+              <Button variant="outline" className="shrink-0"><Plus className="mr-2 h-4 w-4" /> Monitor</Button>
             </div>
           </div>
         </motion.div>
-
-        <motion.div variants={item}>
-          <div className="glass-card p-5">
-            <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Breach Sources Over Time</h3>
-            <div className="h-52">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={barData}>
-                  <XAxis dataKey="name" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-                  <Bar dataKey="count" fill="hsl(var(--cyber-purple))" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-
-      <div className="space-y-4">
-        {mockAccounts.map((account) => (
-          <motion.div key={account.email} variants={item}>
-            <div className="glass-card p-6">
-              <div className="flex flex-col gap-5 md:flex-row md:items-center">
-                <div className="flex-shrink-0"><RiskGauge score={account.score} size={150} /></div>
-                <div className="flex-1 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-display text-lg font-bold text-foreground">{account.email}</h3>
-                    <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></Button>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {account.exposedData.map((d) => (
-                      <span key={d} className="rounded-full bg-destructive/10 px-3 py-1.5 text-xs font-semibold text-destructive">{d}</span>
-                    ))}
-                  </div>
-                  <p className="text-sm text-muted-foreground">Found in <span className="font-bold text-foreground">{account.breaches}</span> breach{account.breaches !== 1 && "es"}</p>
-                  <div className="space-y-2">
-                    {account.recentBreaches.map((b) => (
-                      <div key={b.source} className="flex items-center justify-between rounded-xl bg-muted/50 px-4 py-3 backdrop-blur-sm">
-                        <div className="flex items-center gap-2.5"><AlertTriangle className="h-4 w-4 text-score-warning" /><span className="text-sm font-medium text-foreground">{b.source}</span></div>
-                        <div className="text-right"><span className="text-xs text-muted-foreground">{b.date}</span><span className="ml-4 text-xs font-medium text-muted-foreground">{b.records} records</span></div>
-                      </div>
-                    ))}
-                  </div>
+      ) : (
+        <>
+          {/* Section 1: Public Breach Lookup */}
+          <motion.div variants={item}>
+            <div className="glass-hero-purple overflow-hidden rounded-2xl p-6 text-white">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
+                  <Search className="h-6 w-6" />
                 </div>
+                <div>
+                  <h1 className="font-display text-2xl font-bold">Breach Lookup</h1>
+                  <p className="text-sm text-white/70">Check any email for known data breaches</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <Input
+                  placeholder="Enter any email address to check…"
+                  value={lookupEmail}
+                  onChange={(e) => setLookupEmail(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleLookup()}
+                  className="border-white/20 bg-white/10 text-white placeholder:text-white/50 focus-visible:ring-white/30"
+                />
+                <Button onClick={handleLookup} disabled={isChecking || !lookupEmail.trim()} className="shrink-0 bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm">
+                  {isChecking ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Search className="mr-2 h-4 w-4" />}
+                  {isChecking ? "Scanning…" : "Check"}
+                </Button>
               </div>
             </div>
           </motion.div>
-        ))}
-      </div>
+
+          {/* Lookup Results */}
+          <AnimatePresence>
+            {(isChecking || lookupResult) && (
+              <motion.div variants={item} initial="hidden" animate="show" exit={{ opacity: 0 }}>
+                <div className="glass-card overflow-hidden rounded-2xl p-6">
+                  {isChecking ? (
+                    <div className="flex flex-col items-center justify-center py-10 gap-3">
+                      <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                      <p className="text-sm text-muted-foreground">Scanning breach databases for <span className="font-semibold text-foreground">{lookupEmail}</span>…</p>
+                    </div>
+                  ) : lookupResult && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-display text-lg font-bold text-foreground">Results for {lookupEmail}</h3>
+                        <span className={`rounded-full px-3 py-1 text-xs font-bold ${lookupResult.score >= 70 ? "bg-score-safe/10 text-score-safe" : lookupResult.score >= 40 ? "bg-score-warning/10 text-score-warning" : "bg-score-danger/10 text-score-danger"}`}>
+                          {lookupResult.score >= 70 ? "Low Risk" : lookupResult.score >= 40 ? "Moderate Risk" : "High Risk"}
+                        </span>
+                      </div>
+                      <div className="flex flex-col gap-5 md:flex-row md:items-center">
+                        <div className="flex-shrink-0">
+                          <RiskGauge score={lookupResult.score} size={170} />
+                        </div>
+                        <div className="flex-1 space-y-3">
+                          <div className="flex flex-wrap gap-2">
+                            {lookupResult.exposedData.map((d) => (
+                              <span key={d} className="rounded-full bg-destructive/10 px-3 py-1.5 text-xs font-semibold text-destructive">{d}</span>
+                            ))}
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            Found in <span className="font-bold text-foreground">{lookupResult.breaches}</span> breach{lookupResult.breaches !== 1 && "es"}
+                          </p>
+                          <div className="space-y-2">
+                            {lookupResult.recentBreaches.map((b) => (
+                              <div key={b.source} className="flex items-center justify-between rounded-xl bg-muted/50 px-4 py-3 backdrop-blur-sm">
+                                <div className="flex items-center gap-2.5">
+                                  <AlertTriangle className="h-4 w-4 text-score-warning" />
+                                  <span className="text-sm font-medium text-foreground">{b.source}</span>
+                                </div>
+                                <div className="text-right">
+                                  <span className="text-xs text-muted-foreground">{b.date}</span>
+                                  <span className="ml-4 text-xs font-medium text-muted-foreground">{b.records} records</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Monitoring Section */}
+          {hasAccounts && (
+            <>
+              {/* Section Header */}
+              <motion.div variants={item}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <ShieldAlert className="h-5 w-5 text-muted-foreground" />
+                    <h2 className="font-display text-lg font-bold text-foreground">Monitored Accounts</h2>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <span>{mockAccounts.length} accounts</span>
+                    <span>·</span>
+                    <span>{totalBreaches} breaches</span>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Add account input */}
+              <motion.div variants={item}>
+                <div className="glass-card flex gap-3 rounded-2xl p-4">
+                  <Input placeholder="Add email to ongoing monitoring…" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} className="border-transparent bg-transparent" />
+                  <Button className="shrink-0"><Plus className="mr-2 h-4 w-4" /> Monitor</Button>
+                </div>
+              </motion.div>
+
+              {/* Stat cards row */}
+              <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                {statCards.map((s) => {
+                  const Icon = s.icon;
+                  return (
+                    <motion.div key={s.label} variants={item}>
+                      <div className="glass-card rounded-2xl p-5">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-${s.color}/15`}>
+                            <Icon className={`h-5 w-5 text-${s.color}`} />
+                          </div>
+                        </div>
+                        <p className="font-display text-2xl font-bold text-foreground">{s.value}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{s.label}</p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+              {/* Charts row: Risk Gauge + Donut + Bar */}
+              <div className="grid gap-4 md:grid-cols-3">
+                {/* Risk Score Gauge */}
+                <motion.div variants={item}>
+                  <div className="glass-card flex flex-col items-center justify-center rounded-2xl p-6">
+                    <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">Aggregate Risk</h3>
+                    <RiskGauge score={avgScore} size={180} label="Score" />
+                  </div>
+                </motion.div>
+
+                {/* Donut chart */}
+                <motion.div variants={item}>
+                  <div className="glass-card rounded-2xl p-5">
+                    <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Data Exposure</h3>
+                    <div className="flex items-center gap-4">
+                      <div className="relative h-40 w-40 flex-shrink-0">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie data={exposureData} cx="50%" cy="50%" innerRadius={38} outerRadius={62} dataKey="value" strokeWidth={3} stroke="hsl(var(--card) / 0.5)">
+                              {exposureData.map((_, i) => <Cell key={i} fill={pieColors[i]} />)}
+                            </Pie>
+                          </PieChart>
+                        </ResponsiveContainer>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <span className="font-display text-xl font-bold text-foreground">{totalExposure}</span>
+                          <span className="text-[10px] text-muted-foreground">Total</span>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        {exposureData.map((d, i) => {
+                          const Icon = d.icon;
+                          return (
+                            <div key={d.name} className="flex items-center gap-2">
+                              <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: pieColors[i] }} />
+                              <Icon className="h-3.5 w-3.5 text-muted-foreground" />
+                              <span className="text-xs font-medium text-foreground">{d.name}</span>
+                              <span className="ml-auto text-xs font-semibold text-muted-foreground">{d.value}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Bar chart */}
+                <motion.div variants={item}>
+                  <div className="glass-card rounded-2xl p-5">
+                    <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-muted-foreground">Breach Timeline</h3>
+                    <div className="h-48">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={barData}>
+                          <XAxis dataKey="name" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
+                          <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} allowDecimals={false} />
+                          <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "0.75rem", fontSize: "12px" }} />
+                          <Bar dataKey="count" fill="hsl(var(--cyber-purple))" radius={[8, 8, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Account cards */}
+              <div className="space-y-4">
+                {mockAccounts.map((account) => (
+                  <motion.div key={account.email} variants={item}>
+                    <div className="glass-card rounded-2xl p-6">
+                      <div className="flex flex-col gap-5 md:flex-row md:items-center">
+                        <div className="flex-shrink-0"><RiskGauge score={account.score} size={150} /></div>
+                        <div className="flex-1 space-y-3">
+                          <div className="flex items-center justify-between">
+                            <h3 className="font-display text-lg font-bold text-foreground">{account.email}</h3>
+                            <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></Button>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {account.exposedData.map((d) => (
+                              <span key={d} className="rounded-full bg-destructive/10 px-3 py-1.5 text-xs font-semibold text-destructive">{d}</span>
+                            ))}
+                          </div>
+                          <p className="text-sm text-muted-foreground">Found in <span className="font-bold text-foreground">{account.breaches}</span> breach{account.breaches !== 1 && "es"}</p>
+                          <div className="space-y-2">
+                            {account.recentBreaches.map((b) => (
+                              <div key={b.source} className="flex items-center justify-between rounded-xl bg-muted/50 px-4 py-3 backdrop-blur-sm">
+                                <div className="flex items-center gap-2.5"><AlertTriangle className="h-4 w-4 text-score-warning" /><span className="text-sm font-medium text-foreground">{b.source}</span></div>
+                                <div className="text-right"><span className="text-xs text-muted-foreground">{b.date}</span><span className="ml-4 text-xs font-medium text-muted-foreground">{b.records} records</span></div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </>
+          )}
+        </>
+      )}
     </motion.div>
   );
 };
