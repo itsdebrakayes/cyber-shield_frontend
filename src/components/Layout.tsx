@@ -1,5 +1,6 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Shield,
   Sun,
@@ -42,8 +43,14 @@ const navLinks = [
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { theme, toggleTheme } = useTheme();
+  const { user, signOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
+  const handleSignOut = () => {
+    signOut();
+    navigate("/login");
+  };
   return (
     <div className="min-h-screen bg-background">
       {/* Ambient color splotches */}
@@ -124,13 +131,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                {user && (
+                  <div className="px-2 py-1.5 text-xs text-muted-foreground border-b border-border mb-1">
+                    <div className="font-medium text-foreground">{user.fullName}</div>
+                    <div>{user.email}</div>
+                  </div>
+                )}
                 <DropdownMenuItem asChild>
                   <Link to="/settings">Settings</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/login" className="flex items-center gap-2">
-                    <LogOut className="h-4 w-4" /> Sign Out
-                  </Link>
+                <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2 cursor-pointer">
+                  <LogOut className="h-4 w-4" /> Sign Out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
