@@ -50,8 +50,8 @@ const AudioDetection: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-xl text-center"
         >
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/10">
-            <AudioLines className="h-10 w-10 text-primary" />
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-cyber-teal/20 to-cyber-green/20">
+            <AudioLines className="h-10 w-10 text-cyber-teal" />
           </div>
           <h1 className="font-display text-3xl font-bold text-foreground mb-2">Audio Detection</h1>
           <p className="text-muted-foreground mb-8">Upload an audio file to detect synthetic voice patterns and AI manipulation</p>
