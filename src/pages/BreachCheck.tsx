@@ -4,7 +4,7 @@ import { ShieldAlert, Search, Plus, Trash2, AlertTriangle, Lock, Eye, Mail, Phon
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import RiskGauge from "@/components/RiskGauge";
-import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileBreachCheck from "@/pages/mobile/MobileBreachCheck";
 
