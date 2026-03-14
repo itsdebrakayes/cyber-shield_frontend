@@ -74,7 +74,7 @@ const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
 
 const statCards = [
   { label: "Total Threats", value: "7", icon: Shield, color: "cyber-red" },
-  { label: "Email Risk", value: "64%", icon: Mail, color: "cyber-purple" },
+  { label: "Email Risk", value: "64%", icon: Mail, color: "cyber-light-blue" },
   { label: "Password Risk", value: "42%", icon: Key, color: "cyber-yellow" },
   { label: "Data Leaks", value: "5", icon: Database, color: "cyber-teal" },
 ];
