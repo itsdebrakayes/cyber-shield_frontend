@@ -108,7 +108,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 {/* Pink panel — add accounts */}
                 <div className="border-t border-white/15 p-4 sm:p-5 lg:border-l lg:border-t-0">
-                  <div className="glass-accent-cyber h-full rounded-2xl p-5">
+                  <div className="glass-accent-pink h-full rounded-2xl p-5">
                     <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-foreground/60">Add Accounts</h3>
                     <p className="mb-4 text-sm leading-relaxed text-foreground/50">
                       Enter emails or social handles to start monitoring.
@@ -189,7 +189,7 @@ const Dashboard: React.FC = () => {
 
                 {/* Right: Breach sources */}
                 <div className="border-t border-white/15 p-4 sm:p-5 lg:border-l lg:border-t-0">
-                  <div className="glass-accent-cyber dashboard-breach-panel h-full p-5">
+                  <div className="glass-accent-pink dashboard-breach-panel h-full p-5">
                     <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-foreground/60">Breach Sources</h3>
                     <div className="mx-auto h-32 w-32 sm:h-36 sm:w-36">
                       <ResponsiveContainer width="100%" height="100%">
