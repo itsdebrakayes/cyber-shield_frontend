@@ -131,19 +131,20 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </Button>
               </DropdownMenuTrigger>
                <DropdownMenuContent align="end">
-+                {user && (
-+                  <div className="px-2 py-1.5 text-xs text-muted-foreground border-b border-border mb-1">
-+                    <div className="font-medium text-foreground">{user.fullName}</div>
-+                    <div>{user.email}</div>
-+                  </div>
-+                )}
-                 <DropdownMenuItem asChild>
-                   <Link to="/settings">Settings</Link>
-                 </DropdownMenuItem>
-                 <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2 cursor-pointer">
-                   <LogOut className="h-4 w-4" /> Sign Out
-                 </DropdownMenuItem>
-               </DropdownMenuContent>
+               <DropdownMenuContent align="end">
+                {user && (
+                  <div className="px-2 py-1.5 text-xs text-muted-foreground border-b border-border mb-1">
+                    <div className="font-medium text-foreground">{user.fullName}</div>
+                    <div>{user.email}</div>
+                  </div>
+                )}
+                <DropdownMenuItem asChild>
+                  <Link to="/settings">Settings</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2 cursor-pointer">
+                  <LogOut className="h-4 w-4" /> Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
             </DropdownMenu>
 
             {/* Theme toggle - separate circle */}
