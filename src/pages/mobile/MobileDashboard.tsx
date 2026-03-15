@@ -44,7 +44,7 @@ const pieColors = [
 const serviceCards = [
   { title: "Video", description: "Deepfake detection", icon: Video, path: "/video-detection", tone: "video" },
   { title: "Image", description: "AI artifact scan", icon: Image, path: "/image-detection", tone: "image" },
-  { title: "Audio", description: "Synthetic voice", icon: Mic, path: "/audio-detection", tone: "audio" },
+  
   { title: "Email", description: "Phishing analysis", icon: Mail, path: "/email-analysis", tone: "email" },
   { title: "Links", description: "URL scanner", icon: LinkIcon, path: "/link-scanner", tone: "link" },
   { title: "Breach", description: "Credential check", icon: ShieldAlert, path: "/breach-check", tone: "breach" },
