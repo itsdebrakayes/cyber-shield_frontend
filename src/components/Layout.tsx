@@ -12,7 +12,7 @@ import {
   Link as LinkIcon,
   Image,
   Video,
-  Mic,
+  
   Mail,
   ShieldAlert,
 } from "lucide-react";

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Video, Image, Mic, Mail, Link as LinkIcon, ShieldAlert,
+  Video, Image, Mail, Link as LinkIcon, ShieldAlert,
   AlertTriangle, CheckCircle, ArrowRight, Plus, Sparkles } from
 "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
