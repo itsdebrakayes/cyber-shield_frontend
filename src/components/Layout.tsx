@@ -36,7 +36,7 @@ const navLinks = [
   { label: "Link Scanner", path: "/link-scanner", icon: LinkIcon },
   { label: "Image Detection", path: "/image-detection", icon: Image },
   { label: "Video Detection", path: "/video-detection", icon: Video },
-  { label: "Audio Detection", path: "/audio-detection", icon: Mic },
+  
   { label: "Email Analysis", path: "/email-analysis", icon: Mail },
   { label: "Breach Check", path: "/breach-check", icon: ShieldAlert },
 ];
