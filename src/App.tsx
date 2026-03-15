@@ -12,7 +12,7 @@ import Dashboard from "@/pages/Dashboard";
 import LinkScanner from "@/pages/LinkScanner";
 import ImageDetection from "@/pages/ImageDetection";
 import VideoDetection from "@/pages/VideoDetection";
-import AudioDetection from "@/pages/AudioDetection";
+
 import EmailAnalysis from "@/pages/EmailAnalysis";
 import BreachCheck from "@/pages/BreachCheck";
 import Settings from "@/pages/Settings";
